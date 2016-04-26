@@ -4,8 +4,6 @@
 #include "p2Log.h"
 #include "App.h"
 //#include "MemLeaks.h"
-#include "Brofiler.h"
-
 #pragma comment (lib, "Motor2D/Brofiler/ProfilerCore32.lib")
 #pragma comment (lib, "Motor2D/SDL/libx86/SDL2.lib")
 

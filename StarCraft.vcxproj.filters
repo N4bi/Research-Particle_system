@@ -127,9 +127,6 @@
     <ClInclude Include="Motor2D\PugiXml\src\pugixml.hpp">
       <Filter>Tools\PugiXML</Filter>
     </ClInclude>
-    <ClInclude Include="Motor2D\Brofiler.h">
-      <Filter>Tools</Filter>
-    </ClInclude>
     <ClInclude Include="Motor2D\PathFinding.h">
       <Filter>Modules</Filter>
     </ClInclude>
