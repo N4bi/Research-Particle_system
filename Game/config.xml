@@ -1,0 +1,44 @@
+<!-- Config file for the game -->
+
+<config>
+
+  <!-- App Configuration -->
+  <app framerate="0" />
+  
+  <!-- Each module has its own node. Separate configuration -->
+  <window>
+    <resolution width="640" height="480" scale="1"  />
+    <properties borderless='false'
+                fullscreen='false' 
+                resizable='false'
+                windowed='false' />
+    <name>StarCraft</name>
+  </window>
+
+  <render vsync='false'>
+  </render>
+
+  <file_system>
+    <path>data.zip</path>
+    <path>Zerg.zip</path>
+    <path>Terran.zip</path>
+    <path>UI.zip</path>
+    <path>starcraft_font.zip</path>
+	    
+  </file_system>
+
+  <fonts>
+    <default_font size="24" file="Starcraft_Normal.ttf"/>
+    <default_font size="12" file="OpenSans-Regular.ttf"/>
+  </fonts>
+  
+  <map>
+    <folder>maps/</folder>
+  </map>
+
+ <gui>
+    <atlas file="TerranConsole/UI_Panel_Terran.png"/>
+ </gui>
+  
+  
+</config>
