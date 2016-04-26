@@ -231,4 +231,9 @@
       <Filter>Resources</Filter>
     </Xml>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="README.md">
+      <Filter>Resources</Filter>
+    </None>
+  </ItemGroup>
 </Project>
