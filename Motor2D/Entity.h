@@ -21,6 +21,7 @@ enum STATE
 	ATTACK,
 	REPAIR,
 	DYING
+
 };
 
 class Entity
@@ -32,6 +33,7 @@ public:
 	fPoint			center;						// World positoin of Entity. Center
 	iPoint			tile_pos;					// Map position (tiles) of Entity
 	iPoint			collider_offset;			// Useful to correctly place the collider rect
+	iPoint			particles_offset;
 	
 	int		     	tex_width, tex_height;
 
