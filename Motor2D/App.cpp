@@ -15,6 +15,7 @@
 #include "Gui.h"
 #include "Collision.h"
 #include "Fonts.h"
+#include "ParticleManager.h"
 //Gameplay
 #include "GameManager.h"
 
@@ -39,6 +40,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	fonts = new Fonts();
 	gui = new Gui();
 	entity_manager = new EntityManager();
+	particle = new ParticleManager();
 	collision = new Collision();
 	game_manager = new GameManager();
 	// Ordered for awake / start / update
@@ -54,8 +56,9 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	addModule(gui);
 	addModule(entity_manager);
 	addModule(scene);
-	addModule(collision);	
+	addModule(collision);
 	addModule(game_manager);
+	addModule(particle);
 	// render last to swap buffer
 	addModule(render);
 }

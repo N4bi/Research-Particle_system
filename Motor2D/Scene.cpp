@@ -7,6 +7,7 @@
 #include "Map.h"
 #include "PathFinding.h"
 #include "Scene.h"
+#include "ParticleManager.h"
 
 #include "GuiImage.h"
 #include "GuiLabel.h"
@@ -63,6 +64,42 @@ bool Scene::update(float dt)
 	// Paint Layers -- Draw or undraw the map
 	if (app->input->getKey(SDL_SCANCODE_O) == KEY_REPEAT)
 		app->map->setLayerProperty("PROTOTYPE_LOGIC_MAP.tmx", "Logic_Layer", "NoDraw", 1);
+
+	if (app->input->getKey(SDL_SCANCODE_R) == KEY_DOWN)
+	{
+		iPoint m;
+		iPoint m2;
+		app->input->getMousePosition(m);
+		m2 = app->render->screenToWorld(m.x, m.y);
+
+		Particle p;
+		p.life = 5;
+		p.speed.set(0, 0);
+		p.anim.frames.push_back({ 0, 0, 128, 128 });
+		p.anim.frames.push_back({ 0, 128, 128, 128 });
+		p.anim.frames.push_back({ 0, 256, 128, 128 });
+		p.anim.frames.push_back({ 0, 384, 128, 128 });
+		p.anim.frames.push_back({ 0, 512, 128, 128 });
+		p.anim.frames.push_back({ 0, 640, 128, 128 });
+		p.anim.frames.push_back({ 0, 768, 128, 128 });
+		p.anim.frames.push_back({ 0, 896, 128, 128 });
+		p.anim.frames.push_back({ 0, 1024, 128, 128 });
+		p.anim.speed = 0.05f;
+		p.anim.loop = true;
+		p.anim.current_frame = 0.0f;
+
+		particle = app->particle->addParticle(p, m2.x, m2.y, 15, "Particles/Explosion/Small_Explosion.png");
+	}
+
+	/*if (particle)
+	{
+		iPoint m;
+		iPoint m2;
+		app->input->getMousePosition(m);
+		m2 = app->render->screenToWorld(m.x, m.y);
+
+		particle->followPoint(m2.x, m2.y);
+	}*/
 
 	return true;
 }

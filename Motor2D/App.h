@@ -25,6 +25,7 @@ class Gui;
 class EntityManager;
 class Collision;
 class GameManager;
+class ParticleManager;
 
 
 class App
@@ -104,6 +105,7 @@ public:
 	EntityManager*		entity_manager;
 	Collision*			collision;
 	GameManager*		game_manager;
+	ParticleManager*	particle = NULL;
 
 private:
 

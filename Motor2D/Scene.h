@@ -9,6 +9,7 @@ using namespace std;
 struct SDL_Texture;
 class GuiImage;
 class GuiLabel;
+class Particle;
 
 class Scene : public Module
 {
@@ -42,6 +43,7 @@ public:
 private:
 
 	bool debug = false;
+	Particle* particle = NULL;
 };
 
 #endif // __SCENE_H__
