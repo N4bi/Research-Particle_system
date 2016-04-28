@@ -113,6 +113,12 @@ Particle* ParticleManager::addParticle(const Particle& p, int x, int y, Uint32 s
 		app->tex->unloadTexture(part->image);
 		part->image = app->tex->loadTexture(imageFile);
 	}
+	else
+	{
+		part->quad.w = part->quad.h = 20;
+		part->quad.x = x;
+		part->quad.y = y;
+	}
 
 	if (audioFile != NULL)
 	{
@@ -193,8 +199,15 @@ bool Particle::postUpdate()
 {
 	if (alive)
 	{
-		SDL_Rect sect = anim.getCurrentFrame();
-		app->render->blit(image, position.x, position.y, &sect);
+		if (image != NULL)
+		{
+			SDL_Rect sect = anim.getCurrentFrame();
+			app->render->blit(image, position.x, position.y, &sect);
+		}
+		else
+		{
+			app->render->DrawQuad(quad, 255, 0, 0);
+		}
 
 		if (fxPlayed == false)
 		{
@@ -202,6 +215,7 @@ bool Particle::postUpdate()
 			app->audio->playFx(fx);
 		}
 	}
+
 
 	return true;
 }

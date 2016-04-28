@@ -22,8 +22,8 @@ struct Particle
 	unsigned int lifes;
 	Timer timer;
 	SDL_Texture* image = NULL;
+	SDL_Rect	 quad;
 	bool alive;
-
 	Particle();
 	Particle(const Particle& p);
 	~Particle();
@@ -53,12 +53,15 @@ public:
 
 	bool cleanActiveParticles();
 
-	Particle* addParticle(const Particle& p, int x, int y, Uint32 secLife, const char* imageFile = NULL, const char* audioFile = NULL, uint32 delay = 0);
+	Particle* addParticle(const Particle& p, int x, int y, Uint32 secLife = INT_MAX, const char* imageFile = NULL, const char* audioFile = NULL, uint32 delay = 0);
 
+	
 private:
 	SDL_Texture* texture;
 	std::list<Particle*> particleList;
 	std::string textureFile;
+
+
 
 public:
 
