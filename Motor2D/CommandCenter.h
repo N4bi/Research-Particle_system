@@ -62,26 +62,45 @@ public:
 		switch (state)
 		{
 		case IDLE:
-
-			if (current_hp <= max_hp /2 && particle_on == false)
+			if (current_hp < max_hp)
 			{
+				if (current_hp <= max_hp / 2 && particle_on == false)
+				{
 					particle_on = true;
 					if (particle_on)
-					{				
-						 fire_particle_low = app->particle->addParticle(building_fire_low, pos.x + particles_offset.x, pos.y + particles_offset.y,1000000,"Particles/Burn/Building_Burn_1.png");
+					{
+						fire_particle_low = app->particle->addParticle(building_fire_low, pos.x + particles_offset.x, pos.y + particles_offset.y);
 					}
-					
+
+				}
+
+				if (current_hp <= max_hp / 3 && particle2_on == false)
+				{
+					particle2_on = true;
+					if (particle2_on)
+					{
+						fire_particle_huge = app->particle->addParticle(building_fire_huge, center.x + particles_offset.x - 15, center.y + particles_offset.y - 15, INT_MAX, "Particles/Burn/Building_Burn_1.png");
+					}
+
+				}
+			}
+			else
+			{
+				if (particle_on == true)
+				{
+					particle_on = false;
+					fire_particle_low->destroyParticle();
+
+					if (particle2_on == true)
+					{
+						particle2_on = false;
+						fire_particle_huge->destroyParticle();
+					}
+				
+				}
 			}
 
-			if(current_hp <= max_hp / 3 && particle2_on == false)
-			{	//particle2_on... this can be improved, but idk how at this moment  -.-'
-				particle2_on = true;
-				if (particle2_on)
-				{
-					fire_particle_huge = app->particle->addParticle(building_fire_huge, center.x + particles_offset.x - 10, center.y + particles_offset.y - 15, 1000000, "Particles/Burn/Building_Burn_1.png");
-				}
-				
-			}
+
 			break;
 		case MOVE:
 			break;
