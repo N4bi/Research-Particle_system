@@ -83,10 +83,19 @@ bool Scene::update(float dt)
 		p.anim.frames.push_back({ 0, 896, 128, 128 });
 		p.anim.frames.push_back({ 0, 1024, 128, 128 });
 		p.anim.speed = 0.05f;
-		p.anim.loop = false;
+		p.anim.loop = true;
 		p.anim.current_frame = 0.0f;
 
-		particle = app->particle->addParticle(p, m.x, m.y,1, "Particles/Explosion/Small_Explosion.png");
+		particle = app->particle->addParticle(p, m.x, m.y, 5, "Particles/Explosion/Small_Explosion.png");
+		particle->disable();
+	}
+
+	if (particle)
+	{
+		if (app->input->getKey(SDL_SCANCODE_E) == KEY_DOWN)
+		{
+			particle->enable();
+		}
 	}
 
 	if (app->input->getKey(SDL_SCANCODE_T) == KEY_DOWN)
@@ -96,7 +105,7 @@ bool Scene::update(float dt)
 		m = app->render->screenToWorld(m.x, m.y);
 
 		Particle p;
-		p.speed.set(0, 0);
+		p.speed.set(2, 5);
 		p.anim.frames.push_back({ 0, 0, 128, 128 });
 		p.anim.frames.push_back({ 0, 128, 128, 128 });
 		p.anim.frames.push_back({ 0, 256, 128, 128 });

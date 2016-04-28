@@ -53,6 +53,21 @@ bool ParticleManager::update(float dt)
 		}
 	}
 
+	std::list<Emisor*>::iterator tmp2 = emisorList.begin();
+
+	while (tmp2 != emisorList.end())
+	{
+		if ((*tmp2)->update(dt) == false)
+		{
+			RELEASE((*tmp2));
+			tmp2 = emisorList.erase(tmp2);
+		}
+		else
+		{
+			++tmp2;
+		}
+	}
+
 	return ret;
 }
 
@@ -65,6 +80,13 @@ bool ParticleManager::postUpdate()
 	for (; tmp != particleList.end(); ++tmp)
 	{
 		(*tmp)->postUpdate();
+	}
+
+	std::list<Emisor*>::iterator tmp2 = emisorList.begin();
+
+	for (; tmp2 != emisorList.end(); ++tmp2)
+	{
+		(*tmp2)->postUpdate();
 	}
 
 	return ret;
@@ -114,6 +136,10 @@ Particle* ParticleManager::addParticle(const Particle& p, int x, int y, Uint32 s
 		app->tex->unloadTexture(part->image);
 		part->image = app->tex->loadTexture(imageFile);
 	}
+	else if (p.image != NULL)
+	{
+		part->image = p.image;
+	}
 	else
 	{
 		part->quad.w = part->quad.h = 20;
@@ -140,17 +166,19 @@ Emisor* ParticleManager::addEmisor(Particle& p, int x, int y, Uint32 emisorDurat
 	ret = new Emisor(p);
 	ret->position.set(x, y);
 	ret->duration = emisorDuration;
-	ret->particleEmited->life = particleLife;
+	ret->particleEmited.life = particleLife;
 	
 	if (imageFile != NULL)
 	{
-		app->tex->unloadTexture(ret->particleEmited->image);
-		ret->particleEmited->image = app->tex->loadTexture(imageFile);
+		app->tex->unloadTexture(ret->particleEmited.image);
+		ret->particleEmited.image = app->tex->loadTexture(imageFile);
 	}
 
 
 	ret->timer.start();
 	ret->active = ret->alive = true;
+
+	emisorList.push_back(ret);
 
 	return ret;
 }
@@ -209,7 +237,7 @@ bool Particle::update(float dt)
 			ret = false;
 	}
 
-	if (alive == true)
+	if ( alive == true && active == true)
 	{
 		position.x += speed.x * dt / 1000;
 		position.y += speed.y * dt / 1000;
@@ -219,7 +247,7 @@ bool Particle::update(float dt)
 }
 bool Particle::postUpdate()
 {
-	if (alive)
+	if (alive && active)
 	{
 		if (image != NULL)
 		{
@@ -242,6 +270,16 @@ bool Particle::postUpdate()
 	return true;
 }
 
+void Particle::enable()
+{
+	active = true;
+	timer.start();
+}
+
+void Particle::disable()
+{
+	active = false;
+}
 
 // Emisor
 
@@ -254,7 +292,7 @@ Emisor::Emisor()
 
 Emisor::Emisor(Particle& p)
 {
-	particleEmited = &p;
+	particleEmited = p;
 	position.setZero();
 	speed.setZero();
 	fxPlayed = false;
@@ -300,7 +338,7 @@ bool Emisor::postUpdate()
 
 void Emisor::setParticle(Particle& particle)
 {
-	particleEmited = &particle;
+	particleEmited = particle;
 }
 
 void Emisor::enable()
@@ -321,10 +359,11 @@ void Emisor::destroy()
 
 void Emisor::generateParticle()
 {
-	float velocity = ((particleEmited->speed.x * particleEmited->speed.x) - (particleEmited->speed.y * particleEmited->speed.y));
+	float velocity = ((particleEmited.speed.x * particleEmited.speed.x) - (particleEmited.speed.y * particleEmited.speed.y));
 	srand(time(0));
 	float angle = rand() % 360;
-	particleEmited->speed.x = velocity * cos(angle * (PI/180));
+	particleEmited.speed.x = velocity * cos(angle * (PI/180));
+	particleEmited.speed.y = velocity * sin(angle * (PI / 180));
 
-	app->particle->addParticle(*particleEmited, position.x, position.y, 5);
+	app->particle->addParticle(particleEmited, position.x, position.y, 5);
 }

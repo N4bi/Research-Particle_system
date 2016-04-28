@@ -26,6 +26,8 @@ struct Particle
 	SDL_Texture* image = NULL;
 	SDL_Rect	 quad;
 	bool alive;
+	bool active = true;
+
 	Particle();
 	Particle(const Particle& p);
 	~Particle();
@@ -33,6 +35,8 @@ struct Particle
 	bool postUpdate();
 	void followPoint(int x, int y);
 	void destroyParticle();
+	void enable();
+	void disable();
 };
 
 
@@ -47,7 +51,7 @@ struct Emisor
 	bool alive;
 	uint fx;
 	bool fxPlayed;
-	Particle* particleEmited = NULL;
+	Particle particleEmited;
 
 
 	Emisor();
@@ -88,6 +92,7 @@ public:
 private:
 	SDL_Texture* texture;
 	std::list<Particle*> particleList;
+	std::list<Emisor*> emisorList;
 	std::string textureFile;
 
 
