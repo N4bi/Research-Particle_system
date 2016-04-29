@@ -86,7 +86,7 @@ bool Scene::update(float dt)
 		p.anim.loop = true;
 		p.anim.current_frame = 0.0f;
 
-		particle = app->particle->addParticle(p, m.x, m.y, 5, false, "Particles/Explosion/Small_Explosion.png");
+		particle = app->particle->addParticle(p, m.x, m.y, 5, "Particles/Explosion/Small_Explosion.png");
 	}
 
 	if (app->input->getKey(SDL_SCANCODE_T) == KEY_DOWN)
@@ -110,14 +110,16 @@ bool Scene::update(float dt)
 		p.anim.current_frame = 0.0f;
 
 
-		float emisorDuration = 0.5f;
+		float emisorDuration = 10.5f;
 		Uint32 particleLife = 2;
 		int particleVelocity = 40;
-		float frequence = 5.0f;
-		uint particleQuantity = 0;
+		float min = 30.0f;
+		float max = 40.0f;
 
-		app->particle->addEmisor(p, m.x, m.y, emisorDuration, particleLife, 
-			particleVelocity, frequence, particleQuantity, "Particles/Explosion/fire.png");
+		Emisor* e = app->particle->addEmisor(p, m.x, m.y, emisorDuration, particleLife, 
+			particleVelocity, min, max, "Particles/Explosion/fire.png");
+	
+		e->speed.set(10, 10);
 	}
 
 	return true;

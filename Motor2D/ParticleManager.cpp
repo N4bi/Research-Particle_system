@@ -137,7 +137,7 @@ void ParticleManager::setSpeed(float velocity, fPoint& speed, float minAngle, fl
 	LOG("Speed x: %f. Speed y: %f", speed.x, speed.y);
 }
 
-Particle* ParticleManager::addParticle(const Particle& p, int x, int y, Uint32 secLife, bool emisor, const char* imageFile, const char* audioFile, uint32 delay)
+Particle* ParticleManager::addParticle(const Particle& p, int x, int y, Uint32 secLife, const char* imageFile, const char* audioFile, uint32 delay)
 {
 	Particle* part = NULL;
 
@@ -172,18 +172,17 @@ Particle* ParticleManager::addParticle(const Particle& p, int x, int y, Uint32 s
 
 	part->timer.start();
 
-	if(emisor == false)
-		particleList.push_back(part);
+	particleList.push_back(part);
 
 	return part;
 }
 
 Emisor* ParticleManager::addEmisor(Particle& p, int x, int y, float emisorDuration, Uint32 particleLife, int particleVelocity,
-	float frequence, uint particleQuantity, const char* imageFile)  // If all particles are load at creation point
+	float minAngle, float maxAngle, const char* imageFile)  // If all particles are load at creation point
 {
 	Emisor* ret = NULL;
 
-	ret = new Emisor(p, frequence);
+	ret = new Emisor(p);
 	ret->position.set(x, y);
 	ret->duration = emisorDuration;
 	ret->particleEmited.life = particleLife;
@@ -304,10 +303,10 @@ void Particle::disable()
 
 void Particle::setSpeed(float velocity, float minAngle, float maxAngle)
 {
-	float angle = rand() % 360;
+	float angle = rand() % 360;//(int)(minAngle + maxAngle);//(int)(maxAngle + minAngle);
 	speed.x = velocity * cos(angle * (PI / 180));
 	speed.y = velocity * sin(angle * (PI / 180));
-	//LOG("Angle: %f", angle);
+	LOG("Angle: %f", angle);
 	//LOG("Speed x: %f. Speed y: %f", speed.x, speed.y);
 }
 
@@ -320,9 +319,8 @@ Emisor::Emisor()
 	active = alive = fxPlayed = false;
 }
 
-Emisor::Emisor(Particle& p, float freq)
+Emisor::Emisor(Particle& p)
 {
-	frequance = freq;
 	particleEmited = p;
 	position.setZero();
 	speed.setZero();
@@ -346,7 +344,7 @@ bool Emisor::update(float dt) // If particles are created each frame
 	if (alive && active)
 	{
 		Particle* q = app->particle->addParticle(particleEmited, position.x, position.y, particleEmited.life);
-		q->setSpeed(velocity);
+		q->setSpeed(velocity, minAngle, maxAngle);
 
 		for (int i = 0; i < particles.size(); ++i)
 		{

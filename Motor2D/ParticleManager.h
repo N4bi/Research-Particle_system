@@ -61,10 +61,12 @@ struct Emisor
 	uint particlesPerFrame = 0;
 	uint particlesOut = 0;
 	float velocity;
+	float minAngle;
+	float maxAngle;
 
 
 	Emisor();
-	Emisor(Particle& p, float freq);
+	Emisor(Particle& p);
 	~Emisor();
 	bool update(float dt);
 	bool postUpdate();
@@ -93,10 +95,10 @@ public:
 
 	bool cleanActiveParticles();
 
-	Particle* addParticle(const Particle& p, int x, int y, Uint32 secLife = INT_MAX, bool emisor = false, const char* imageFile = NULL,
+	Particle* addParticle(const Particle& p, int x, int y, Uint32 secLife = INT_MAX, const char* imageFile = NULL,
 		const char* audioFile = NULL, uint32 delay = 0);
 
-	Emisor* addEmisor(Particle& p, int x, int y, float emisorDuration, Uint32 particleLife, int particleVelocity, float frequence, uint particleQuantity = 0,
+	Emisor* addEmisor(Particle& p, int x, int y, float emisorDuration, Uint32 particleLife, int particleVelocity, float minAngle = 0.0f, float maxAngle = 360.0f,
 		const char* imageFile = NULL);
 
 private:

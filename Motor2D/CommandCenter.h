@@ -69,7 +69,7 @@ public:
 					particle_on = true;
 					if (particle_on)
 					{
-						fire_particle_low = app->particle->addParticle(building_fire_low, pos.x + particles_offset.x, pos.y + particles_offset.y);
+						fire_particle_low = app->particle->addParticle(building_fire_low, pos.x + particles_offset.x, pos.y + particles_offset.y,INT_MAX,"Particles/Burn/Building_Burn_1.png");
 					}
 
 				}
