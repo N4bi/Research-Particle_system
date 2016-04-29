@@ -175,7 +175,7 @@ bool Scene::update(float dt)
 		p.anim.current_frame = 0.0f;
 
 
-		float emisorDuration = 1.0f;
+		float emisorDuration = 5.0f;
 		Uint32 particleLife = 5;
 		int particleVelocity = 500;
 		float min = 250.0f;

@@ -137,7 +137,7 @@ void ParticleManager::setSpeed(float velocity, fPoint& speed, float minAngle, fl
 	LOG("Speed x: %f. Speed y: %f", speed.x, speed.y);
 }
 
-Particle* ParticleManager::addParticle(const Particle& p, int x, int y, Uint32 secLife, const char* imageFile, const char* audioFile, uint32 delay)
+Particle* ParticleManager::addParticle(const Particle& p, int x, int y, Uint32 secLife, const char* imageFile, const char* audioFile)
 {
 	Particle* part = NULL;
 
@@ -208,7 +208,7 @@ Emisor* ParticleManager::addEmisor(Particle& p, int x, int y, float emisorDurati
 // Particle
 
 
-Particle::Particle() : fx(0), life(0), fxPlayed(false), follow(false), lifes(0), alive(false)
+Particle::Particle() : fx(0), life(0), fxPlayed(false), alive(false)
 {
 	position.setZero();
 	speed.setZero();
@@ -218,8 +218,6 @@ Particle::Particle(const Particle& p)
 {
 	fx = p.fx;
 	life = p.life;
-	lifes = p.lifes;
-	follow = p.follow;
 	initialPosition = p.position;
 	speed = p.speed;
 	alive = p.alive;
@@ -308,7 +306,7 @@ void Particle::setSpeed(float velocity, float minAngle, float maxAngle)
 	float angle = minAngle + (rand() % (int)(maxAngle - minAngle));
 	speed.x = velocity * cos(angle * (PI / 180));
 	speed.y = velocity * sin(angle * (PI / 180));
-	LOG("Angle: %f", angle);
+	//LOG("Angle: %f", angle);
 	//LOG("Speed x: %f. Speed y: %f", speed.x, speed.y);
 }
 
@@ -347,16 +345,6 @@ bool Emisor::update(float dt) // If particles are created each frame
 	{
 		Particle* q = app->particle->addParticle(particleEmited, position.x, position.y, particleEmited.life);
 		q->setSpeed(velocity, minAngle, maxAngle);
-
-		for (int i = 0; i < particles.size(); ++i)
-		{
-			Particle* p = particles[i];
-			LOG("Particle %d timer %f: ", i, p->timer.read());
-			if (p->update(dt) == false)
-			{
-				p->disable();
-			}
-		}
 
 		position.x += speed.x * dt / 1000;
 		position.y += speed.y * dt / 1000;

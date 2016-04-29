@@ -10,6 +10,46 @@
 
 struct SDL_Texture;
 class Timer;
+class Particle;
+class Emisor;
+
+class ParticleManager : public Module
+{
+public:
+	ParticleManager();
+	~ParticleManager();
+
+	bool awake(pugi::xml_node &node);
+
+	bool start();
+
+	bool update(float dt);
+
+	bool postUpdate();
+
+	bool cleanUp();
+
+	bool cleanActiveParticles();
+
+	Particle* addParticle(const Particle& p, int x, int y, Uint32 secLife = INT_MAX, const char* imageFile = NULL,
+		const char* audioFile = NULL);
+
+	Emisor* addEmisor(Particle& p, int x, int y, float emisorDuration, Uint32 particleLife, int particleVelocity, float minAngle = 0.0f, float maxAngle = 360.0f,
+		const char* imageFile = NULL);
+
+private:
+	SDL_Texture* texture;
+	std::list<Particle*> particleList;
+	std::list<Emisor*> emisorList;
+	std::string textureFile;
+
+
+	void setSpeed(float velocity, fPoint& speed, float minAngle = 0.0f, float maxAngle = 360.0f);
+
+public:
+
+
+};
 
 struct Particle
 {
@@ -20,8 +60,6 @@ struct Particle
 	fPoint speed;
 	Uint32 life;	// Time the particle life
 	bool fxPlayed;
-	bool follow;
-	unsigned int lifes;
 	Timer timer;
 	SDL_Texture* image = NULL;
 	SDL_Rect	 quad;
@@ -43,11 +81,11 @@ struct Particle
 };
 
 
-struct Emisor
+class Emisor
 {
+public:
 	fPoint position;
 	fPoint speed;
-	uint range;
 	float duration;
 	Timer timer;
 	bool active;
@@ -55,16 +93,12 @@ struct Emisor
 	uint fx;
 	bool fxPlayed;
 	float frequance; //Particle ammount per second
-	uint particleQuantity;
 	Particle particleEmited;
-	std::vector<Particle*> particles;
-	uint particlesPerFrame = 0;
-	uint particlesOut = 0;
 	float velocity;
 	float minAngle;
 	float maxAngle;
 
-
+public:
 	Emisor();
 	Emisor(Particle& p);
 	~Emisor();
@@ -76,43 +110,7 @@ struct Emisor
 	void destroy();
 };
 
-class ParticleManager : public Module
-{
-public:
-	ParticleManager();
-	~ParticleManager();
 
-	bool awake(pugi::xml_node &node);
-
-	bool start();
-
-	bool update(float dt);
-
-	bool postUpdate();
-
-	bool cleanUp();
-
-	bool cleanActiveParticles();
-
-	Particle* addParticle(const Particle& p, int x, int y, Uint32 secLife = INT_MAX, const char* imageFile = NULL,
-		const char* audioFile = NULL, uint32 delay = 0);
-
-	Emisor* addEmisor(Particle& p, int x, int y, float emisorDuration, Uint32 particleLife, int particleVelocity, float minAngle = 0.0f, float maxAngle = 360.0f,
-		const char* imageFile = NULL);
-
-private:
-	SDL_Texture* texture;
-	std::list<Particle*> particleList;
-	std::list<Emisor*> emisorList;
-	std::string textureFile;
-
-
-	void setSpeed(float velocity, fPoint& speed, float minAngle = 0.0f, float maxAngle = 360.0f);
-
-public:
-
-
-};
 
 
 
