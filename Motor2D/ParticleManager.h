@@ -15,9 +15,9 @@ struct Particle
 {
 	Animation anim;
 	unsigned int fx; //This is for audio
-	iPoint position;
-	iPoint initialPosition;
-	iPoint speed;
+	fPoint position;
+	fPoint initialPosition;
+	fPoint speed;
 	Uint32 life;	// Time the particle life
 	bool fxPlayed;
 	bool follow;
@@ -42,8 +42,8 @@ struct Particle
 
 struct Emisor
 {
-	iPoint position;
-	iPoint speed;
+	fPoint position;
+	fPoint speed;
 	uint range;
 	Uint32 duration;
 	Timer timer;
@@ -51,11 +51,16 @@ struct Emisor
 	bool alive;
 	uint fx;
 	bool fxPlayed;
+	float frequance; //Particle ammount per second
+	uint particleQuantity;
 	Particle particleEmited;
+	std::vector<Particle*> particles;
+	uint particlesPerFrame = 0;
+	uint particlesOut = 0;
 
 
 	Emisor();
-	Emisor(Particle& p);
+	Emisor(Particle& p, float freq);
 	~Emisor();
 	bool update(float dt);
 	bool postUpdate();
@@ -63,7 +68,6 @@ struct Emisor
 	void enable();
 	void disable();
 	void destroy();
-	void generateParticle();
 };
 
 
@@ -85,9 +89,11 @@ public:
 
 	bool cleanActiveParticles();
 
-	Particle* addParticle(const Particle& p, int x, int y, Uint32 secLife = INT_MAX, const char* imageFile = NULL, const char* audioFile = NULL, uint32 delay = 0);
+	Particle* addParticle(const Particle& p, int x, int y, Uint32 secLife = INT_MAX, bool emisor = false, const char* imageFile = NULL,
+		const char* audioFile = NULL, uint32 delay = 0);
 
-	Emisor* addEmisor(Particle& p, int x, int y, Uint32 emisorDuration, Uint32 particleLife, const char* imageFile = NULL);
+	Emisor* addEmisor(Particle& p, int x, int y, Uint32 emisorDuration, Uint32 particleLife, int particleVelocity, float frequence, uint particleQuantity = 0,
+		const char* imageFile = NULL);
 
 private:
 	SDL_Texture* texture;
@@ -96,6 +102,7 @@ private:
 	std::string textureFile;
 
 
+	void setSpeed(float velocity, fPoint& speed, float minAngle = 0.0f, float maxAngle = 360.0f);
 
 public:
 

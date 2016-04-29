@@ -59,6 +59,7 @@ bool ParticleManager::update(float dt)
 	{
 		if ((*tmp2)->update(dt) == false)
 		{
+			(*tmp2)->destroy();
 			RELEASE((*tmp2));
 			tmp2 = emisorList.erase(tmp2);
 		}
@@ -119,7 +120,17 @@ bool ParticleManager::cleanActiveParticles()
 	return true;
 }
 
-Particle* ParticleManager::addParticle(const Particle& p, int x, int y, Uint32 secLife, const char* imageFile, const char* audioFile, uint32 delay)
+void ParticleManager::setSpeed(float velocity, fPoint& speed, float minAngle, float maxAngle)
+{
+	std::srand(time(NULL));
+	float angle = rand() % 360;
+	speed.x = velocity * cos(angle * (PI / 180));
+	speed.y = velocity * sin(angle * (PI / 180));
+	LOG("Angle: %f", angle);
+	LOG("Speed x: %f. Speed y: %f", speed.x, speed.y);
+}
+
+Particle* ParticleManager::addParticle(const Particle& p, int x, int y, Uint32 secLife, bool emisor, const char* imageFile, const char* audioFile, uint32 delay)
 {
 	Particle* part = NULL;
 
@@ -154,16 +165,18 @@ Particle* ParticleManager::addParticle(const Particle& p, int x, int y, Uint32 s
 
 	part->timer.start();
 
-	particleList.push_back(part);
+	if(emisor == false)
+		particleList.push_back(part);
 
 	return part;
 }
 
-Emisor* ParticleManager::addEmisor(Particle& p, int x, int y, Uint32 emisorDuration, Uint32 particleLife, const char* imageFile)
+Emisor* ParticleManager::addEmisor(Particle& p, int x, int y, Uint32 emisorDuration, Uint32 particleLife, int particleVelocity,
+	float frequence, uint particleQuantity, const char* imageFile)
 {
 	Emisor* ret = NULL;
 
-	ret = new Emisor(p);
+	ret = new Emisor(p, frequence);
 	ret->position.set(x, y);
 	ret->duration = emisorDuration;
 	ret->particleEmited.life = particleLife;
@@ -174,6 +187,22 @@ Emisor* ParticleManager::addEmisor(Particle& p, int x, int y, Uint32 emisorDurat
 		ret->particleEmited.image = app->tex->loadTexture(imageFile);
 	}
 
+	if (particleQuantity == 0)
+	{
+		ret->particleQuantity = emisorDuration * frequence;
+	}
+	else
+		ret->particleQuantity = particleQuantity;
+
+	for (uint i = 0; i < ret->particleQuantity; ++i)
+	{
+		setSpeed(particleVelocity, ret->particleEmited.speed);
+		Particle* part;
+		part = addParticle(ret->particleEmited, x, y, ret->particleEmited.life, true);
+		part->disable();
+		
+		ret->particles.push_back(part);
+	}
 
 	ret->timer.start();
 	ret->active = ret->alive = true;
@@ -290,8 +319,9 @@ Emisor::Emisor()
 	active = alive = fxPlayed = false;
 }
 
-Emisor::Emisor(Particle& p)
+Emisor::Emisor(Particle& p, float freq)
 {
+	frequance = freq;
 	particleEmited = p;
 	position.setZero();
 	speed.setZero();
@@ -314,9 +344,28 @@ bool Emisor::update(float dt)
 
 	if (alive && active)
 	{
+		for (particlesPerFrame = 0; particlesPerFrame < frequance && particlesOut < particleQuantity; ++particlesPerFrame)
+		{
+			Particle* p = particles[particlesOut];
+
+			p->enable();
+
+			++particlesOut;
+			//LOG("Particle %d active: %d", particlesOut - 1, p->active);
+			//LOG("Particle %d speed: %f %f", particlesOut - 1, p->speed.x, p->speed.y);
+		}
+		/*for (int i = 0; i < particleQuantity; ++i)
+		{
+			Particle* p = particles[i];
+			LOG("Particle %d timer %f: ", i, p->timer.read());
+			if (p->timer.read() >= p->life * 1000)
+			{
+				p->disable();
+			}
+		}*/
+
 		position.x += speed.x * dt / 1000;
 		position.y += speed.y * dt / 1000;
-		generateParticle();
 	}
 
 	return ret;
@@ -326,6 +375,28 @@ bool Emisor::postUpdate()
 {
 	if (alive)
 	{
+		for (int i = 0; i < particleQuantity; ++i)
+		{
+			Particle* p = particles[i];
+
+			if (p->active == true)
+			{
+				//LOG("Particle %d position: %f %f", i, p->position.x, p->position.y);
+				p->position.x += p->speed.x;
+				p->position.y += p->speed.y;
+
+				if (p->image != NULL)
+				{
+					SDL_Rect sect = p->anim.getCurrentFrame();
+					app->render->blit(p->image, p->position.x, p->position.y, &sect);
+				}
+				else
+				{
+					app->render->DrawQuad(p->quad, 255, 0, 0);
+				}
+			}
+		}
+
 		if (fxPlayed == false)
 		{
 			fxPlayed = true;
@@ -354,16 +425,12 @@ void Emisor::disable()
 
 void Emisor::destroy()
 {
+	for (uint i = 0; i < particleQuantity; ++i)
+	{
+		RELEASE(particles[i]);
+	}
+	particles.clear();
+
 	alive = false;
 }
 
-void Emisor::generateParticle()
-{
-	float velocity = ((particleEmited.speed.x * particleEmited.speed.x) - (particleEmited.speed.y * particleEmited.speed.y));
-	srand(time(0));
-	float angle = rand() % 360;
-	particleEmited.speed.x = velocity * cos(angle * (PI/180));
-	particleEmited.speed.y = velocity * sin(angle * (PI / 180));
-
-	app->particle->addParticle(particleEmited, position.x, position.y, 5);
-}
