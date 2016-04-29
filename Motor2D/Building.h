@@ -27,7 +27,13 @@ public:
 		type = BUILDING;
 		state = IDLE;
 
+
+
 		// FIRE ANIMATION----
+		building_fire_low.image = app->tex->loadTexture("Particles/Burn/Building_Burn_1.png");
+		building_fire_huge.image = building_fire_low.image;
+		building_explosion.image = app->tex->loadTexture("Particles/Explosion/Small_Explosion.png");
+
 		building_fire_low.life = 5;
 		building_fire_low.speed.set(0, 0);
 		building_fire_low.anim.frames.push_back({ 0, 0, 64, 64 });

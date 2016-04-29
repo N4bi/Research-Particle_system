@@ -177,17 +177,21 @@ bool Scene::update(float dt)
 
 		float emisorDuration = 1.0f;
 		Uint32 particleLife = 5;
-		int particleVelocity = 500;
-		float min = 250.0f;
-		float max = 290.0f;
+		int particleVelocity = 50;
+		float min = 0.0f;
+		float max = 360.0f;
 
-	/*	particle = app->particle->addParticle(p, m.x, m.y, 5, "Particles/Explosion/explosion.png");
-*/
+		/*particle = app->particle->addParticle(p, m.x, m.y, 5, "particles/explosion/explosion.png");*/
+
 		Emisor* e = app->particle->addEmisor(p, m.x, m.y, emisorDuration, particleLife,
 		particleVelocity, min, max, "Particles/Explosion/explosion.png");
 
-		//e->speed.set(0, 0);
+	/*	Emisor* e = app->particle->addEmisor2(p, m.x, m.y, emisorDuration, particleLife,
+		particleVelocity, min, max, p.image);*/
+
 	}
+
+
 
 	return true;
 }

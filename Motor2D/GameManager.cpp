@@ -61,8 +61,6 @@ void GameManager::startGame()
 		unsigned int size_marines_x = SIZEMARINESX;
 		unsigned int size_marines_y = SIZEMARINESY;
 
-	
-		createMarines({ 1500, 2150 }, size_marines_x, size_marines_y);
 }
 
 
