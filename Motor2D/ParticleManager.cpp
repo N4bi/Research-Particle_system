@@ -106,6 +106,13 @@ bool ParticleManager::cleanUp()
 
 	particleList.clear();
 
+	std::list<Emisor*>::iterator tmp2 = emisorList.begin();
+
+	for (; tmp2 != emisorList.end(); ++tmp2)
+		RELEASE((*tmp2));
+
+	emisorList.clear();
+
 	return true;
 }
 
@@ -171,8 +178,8 @@ Particle* ParticleManager::addParticle(const Particle& p, int x, int y, Uint32 s
 	return part;
 }
 
-Emisor* ParticleManager::addEmisor(Particle& p, int x, int y, Uint32 emisorDuration, Uint32 particleLife, int particleVelocity,
-	float frequence, uint particleQuantity, const char* imageFile)
+Emisor* ParticleManager::addEmisor(Particle& p, int x, int y, float emisorDuration, Uint32 particleLife, int particleVelocity,
+	float frequence, uint particleQuantity, const char* imageFile)  // If all particles are load at creation point
 {
 	Emisor* ret = NULL;
 
@@ -180,29 +187,14 @@ Emisor* ParticleManager::addEmisor(Particle& p, int x, int y, Uint32 emisorDurat
 	ret->position.set(x, y);
 	ret->duration = emisorDuration;
 	ret->particleEmited.life = particleLife;
-	
+	ret->velocity = particleVelocity;
+
 	if (imageFile != NULL)
 	{
 		app->tex->unloadTexture(ret->particleEmited.image);
 		ret->particleEmited.image = app->tex->loadTexture(imageFile);
 	}
 
-	if (particleQuantity == 0)
-	{
-		ret->particleQuantity = emisorDuration * frequence;
-	}
-	else
-		ret->particleQuantity = particleQuantity;
-
-	for (uint i = 0; i < ret->particleQuantity; ++i)
-	{
-		setSpeed(particleVelocity, ret->particleEmited.speed);
-		Particle* part;
-		part = addParticle(ret->particleEmited, x, y, ret->particleEmited.life, true);
-		part->disable();
-		
-		ret->particles.push_back(part);
-	}
 
 	ret->timer.start();
 	ret->active = ret->alive = true;
@@ -310,6 +302,15 @@ void Particle::disable()
 	active = false;
 }
 
+void Particle::setSpeed(float velocity, float minAngle, float maxAngle)
+{
+	float angle = rand() % 360;
+	speed.x = velocity * cos(angle * (PI / 180));
+	speed.y = velocity * sin(angle * (PI / 180));
+	//LOG("Angle: %f", angle);
+	//LOG("Speed x: %f. Speed y: %f", speed.x, speed.y);
+}
+
 // Emisor
 
 Emisor::Emisor()
@@ -333,36 +334,29 @@ Emisor::~Emisor()
 
 }
 
-bool Emisor::update(float dt)
+bool Emisor::update(float dt) // If particles are created each frame
 {
 	bool ret = true;
 
-	if (timer.read() >= duration * 1000 || alive == false || active == false)
+	if (timer.read() >= duration * 1000 || alive == false)
 	{
 		ret = false;
 	}
 
 	if (alive && active)
 	{
-		for (particlesPerFrame = 0; particlesPerFrame < frequance && particlesOut < particleQuantity; ++particlesPerFrame)
-		{
-			Particle* p = particles[particlesOut];
+		Particle* q = app->particle->addParticle(particleEmited, position.x, position.y, particleEmited.life);
+		q->setSpeed(velocity);
 
-			p->enable();
-
-			++particlesOut;
-			//LOG("Particle %d active: %d", particlesOut - 1, p->active);
-			//LOG("Particle %d speed: %f %f", particlesOut - 1, p->speed.x, p->speed.y);
-		}
-		/*for (int i = 0; i < particleQuantity; ++i)
+		for (int i = 0; i < particles.size(); ++i)
 		{
 			Particle* p = particles[i];
 			LOG("Particle %d timer %f: ", i, p->timer.read());
-			if (p->timer.read() >= p->life * 1000)
+			if (p->update(dt) == false)
 			{
 				p->disable();
 			}
-		}*/
+		}
 
 		position.x += speed.x * dt / 1000;
 		position.y += speed.y * dt / 1000;
@@ -375,28 +369,6 @@ bool Emisor::postUpdate()
 {
 	if (alive)
 	{
-		for (int i = 0; i < particleQuantity; ++i)
-		{
-			Particle* p = particles[i];
-
-			if (p->active == true)
-			{
-				//LOG("Particle %d position: %f %f", i, p->position.x, p->position.y);
-				p->position.x += p->speed.x;
-				p->position.y += p->speed.y;
-
-				if (p->image != NULL)
-				{
-					SDL_Rect sect = p->anim.getCurrentFrame();
-					app->render->blit(p->image, p->position.x, p->position.y, &sect);
-				}
-				else
-				{
-					app->render->DrawQuad(p->quad, 255, 0, 0);
-				}
-			}
-		}
-
 		if (fxPlayed == false)
 		{
 			fxPlayed = true;
@@ -425,12 +397,6 @@ void Emisor::disable()
 
 void Emisor::destroy()
 {
-	for (uint i = 0; i < particleQuantity; ++i)
-	{
-		RELEASE(particles[i]);
-	}
-	particles.clear();
-
 	alive = false;
 }
 

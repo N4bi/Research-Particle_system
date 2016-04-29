@@ -37,6 +37,9 @@ struct Particle
 	void destroyParticle();
 	void enable();
 	void disable();
+
+	void setSpeed(float velocity,float minAngle = 0.0f, float maxAngle = 360.0f);
+
 };
 
 
@@ -45,7 +48,7 @@ struct Emisor
 	fPoint position;
 	fPoint speed;
 	uint range;
-	Uint32 duration;
+	float duration;
 	Timer timer;
 	bool active;
 	bool alive;
@@ -57,6 +60,7 @@ struct Emisor
 	std::vector<Particle*> particles;
 	uint particlesPerFrame = 0;
 	uint particlesOut = 0;
+	float velocity;
 
 
 	Emisor();
@@ -92,7 +96,7 @@ public:
 	Particle* addParticle(const Particle& p, int x, int y, Uint32 secLife = INT_MAX, bool emisor = false, const char* imageFile = NULL,
 		const char* audioFile = NULL, uint32 delay = 0);
 
-	Emisor* addEmisor(Particle& p, int x, int y, Uint32 emisorDuration, Uint32 particleLife, int particleVelocity, float frequence, uint particleQuantity = 0,
+	Emisor* addEmisor(Particle& p, int x, int y, float emisorDuration, Uint32 particleLife, int particleVelocity, float frequence, uint particleQuantity = 0,
 		const char* imageFile = NULL);
 
 private:

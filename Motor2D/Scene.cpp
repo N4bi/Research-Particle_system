@@ -96,21 +96,28 @@ bool Scene::update(float dt)
 		m = app->render->screenToWorld(m.x, m.y);
 
 		Particle p;
-		p.speed.set(2, 1);
-		p.anim.frames.push_back({ 0, 0, 128, 128 });
-		p.anim.frames.push_back({ 0, 128, 128, 128 });
-		p.anim.frames.push_back({ 0, 256, 128, 128 });
-		p.anim.frames.push_back({ 0, 384, 128, 128 });
-		p.anim.frames.push_back({ 0, 512, 128, 128 });
-		p.anim.frames.push_back({ 0, 640, 128, 128 });
-		p.anim.frames.push_back({ 0, 768, 128, 128 });
-		p.anim.frames.push_back({ 0, 896, 128, 128 });
-		p.anim.frames.push_back({ 0, 1024, 128, 128 });
-		p.anim.speed = 0.05f;
+		p.anim.frames.push_back({ 0, 0, 78, 156 });
+		p.anim.frames.push_back({ 78, 0, 78, 156 });
+		p.anim.frames.push_back({ 156, 0, 78, 156 });
+		p.anim.frames.push_back({ 234, 0, 78, 156 });
+		p.anim.frames.push_back({ 312, 0, 78, 156 });
+		p.anim.frames.push_back({ 390, 0, 78, 156 });
+		p.anim.frames.push_back({ 468, 0, 78, 156 });
+		p.anim.frames.push_back({ 546, 0, 78, 156 });
+		p.anim.frames.push_back({ 624, 0, 78, 156 });
+		p.anim.speed = 0.01f;
 		p.anim.loop = true;
 		p.anim.current_frame = 0.0f;
 
-		app->particle->addEmisor(p, m.x, m.y, 20, 5,  1, 5, 10, "Particles/Explosion/Small_Explosion.png");
+
+		float emisorDuration = 0.5f;
+		Uint32 particleLife = 2;
+		int particleVelocity = 40;
+		float frequence = 5.0f;
+		uint particleQuantity = 0;
+
+		app->particle->addEmisor(p, m.x, m.y, emisorDuration, particleLife, 
+			particleVelocity, frequence, particleQuantity, "Particles/Explosion/fire.png");
 	}
 
 	return true;
