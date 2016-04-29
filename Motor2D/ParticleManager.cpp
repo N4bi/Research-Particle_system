@@ -22,6 +22,7 @@ bool ParticleManager::awake(pugi::xml_node &node)
 {
 	LOG("Particle Manager: Awake");
 	textureFile.assign(node.child("particle_manager").first_attribute().as_string());
+	std::srand(time(NULL));
 
 	return true;
 }
@@ -122,7 +123,6 @@ bool ParticleManager::cleanActiveParticles()
 
 void ParticleManager::setSpeed(float velocity, fPoint& speed, float minAngle, float maxAngle)
 {
-	std::srand(time(NULL));
 	float angle = rand() % 360;
 	speed.x = velocity * cos(angle * (PI / 180));
 	speed.y = velocity * sin(angle * (PI / 180));
