@@ -110,16 +110,16 @@ bool Scene::update(float dt)
 		p.anim.current_frame = 0.0f;
 
 
-		float emisorDuration = 10.5f;
+		float emisorDuration = 1.0f;
 		Uint32 particleLife = 2;
 		int particleVelocity = 40;
-		float min = 30.0f;
-		float max = 40.0f;
+		float min = 0.0f;
+		float max = 360.0f;
 
 		Emisor* e = app->particle->addEmisor(p, m.x, m.y, emisorDuration, particleLife, 
 			particleVelocity, min, max, "Particles/Explosion/fire.png");
 	
-		e->speed.set(10, 10);
+		e->speed.set(0, 0);
 	}
 
 	return true;

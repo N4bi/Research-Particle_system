@@ -76,7 +76,6 @@ struct Emisor
 	void destroy();
 };
 
-
 class ParticleManager : public Module
 {
 public:

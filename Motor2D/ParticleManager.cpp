@@ -187,6 +187,8 @@ Emisor* ParticleManager::addEmisor(Particle& p, int x, int y, float emisorDurati
 	ret->duration = emisorDuration;
 	ret->particleEmited.life = particleLife;
 	ret->velocity = particleVelocity;
+	ret->minAngle = minAngle;
+	ret->maxAngle = maxAngle;
 
 	if (imageFile != NULL)
 	{
@@ -303,7 +305,7 @@ void Particle::disable()
 
 void Particle::setSpeed(float velocity, float minAngle, float maxAngle)
 {
-	float angle = rand() % 360;//(int)(minAngle + maxAngle);//(int)(maxAngle + minAngle);
+	float angle = minAngle + (rand() % (int)(maxAngle - minAngle));
 	speed.x = velocity * cos(angle * (PI / 180));
 	speed.y = velocity * sin(angle * (PI / 180));
 	LOG("Angle: %f", angle);
