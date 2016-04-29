@@ -42,29 +42,7 @@ bool Gui::awake(pugi::xml_node& conf)
 bool Gui::start()
 {
 	atlas = app->tex->loadTexture(atlas_file_name.data());
-	//terran_console = app->tex->loadTexture("TerranConsole/tconsole.png");
-	
-	// HUD---------------------------------------------------------------------
-	ui_terran = app->gui->createImage(NULL, { 0, 292, 640, 188 });
-	ui_terran->setLocalPos(0, 292);
-	ui_terran->interactive = false;
-	ui_terran->can_focus = true;
 
-	rectangle_map = app->gui->createImage(NULL, { 0, 0, 132, 132 });
-	rectangle_map->setLocalPos(4, 346);
-	rectangle_map->interactive = true;
-	rectangle_map->can_focus = true;
-
-	rectangle_command = app->gui->createImage(NULL, { 0, 152, 37, 34 });
-	rectangle_command->setLocalPos(505, 358);
-	rectangle_command->interactive = false;
-	rectangle_command->can_focus = false;
-
-	rectangle_command_2 = app->gui->createImage(NULL, { 48, 152, 37, 34 });
-	rectangle_command_2->setLocalPos(551, 358);
-	rectangle_command_2->interactive = false;
-	rectangle_command_2->can_focus = false;
-	
 	// CURSOR-----------------------------------------------------------------
 	SDL_ShowCursor(SDL_DISABLE);
 	cursor = app->gui->createCursor(app->tex->loadTexture("Cursor/StarCraftCursors.png"));
