@@ -77,9 +77,9 @@ bool ParticleManager::postUpdate()
 {
 	bool ret = true;
 
-	std::list<Particle*>::iterator tmp = particleList.begin();
+	std::list<Particle*>::reverse_iterator tmp = particleList.rbegin();
 
-	for (; tmp != particleList.end(); ++tmp)
+	for (; tmp != particleList.rend(); ++tmp)
 	{
 		(*tmp)->postUpdate();
 	}
