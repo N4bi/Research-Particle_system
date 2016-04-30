@@ -5,6 +5,7 @@
 #include "Animation.h"
 #include "Point2d.h"
 #include <list>
+#include "FileSystem.h"
 
 #define PI 3.14159265
 
@@ -12,6 +13,7 @@ struct SDL_Texture;
 class Timer;
 class Particle;
 class Emisor;
+class FireEmisor;
 
 class ParticleManager : public Module
 {
@@ -43,16 +45,18 @@ public:
 	Emisor* addEmisor2(Particle& p, int x, int y, float emisorDuration, Uint32 particleLife, int particleVelocity, float minAngle = 0.0f, float maxAngle = 360.0f,
 		SDL_Texture* tex = NULL);
 
+	FireEmisor* addFire(int x, int y, float duration);
+
 private:
 	SDL_Texture* texture;
 	std::list<Particle*> particleList;
 	std::list<Emisor*> emisorList;
 	std::string textureFile;
 
-	void setSpeed(float velocity, fPoint& speed, float minAngle = 0.0f, float maxAngle = 360.0f);
+	bool loadParticlesFile();
 
 public:
-
+	pugi::xml_node particles_node;
 
 };
 
@@ -106,15 +110,37 @@ public:
 public:
 	Emisor();
 	Emisor(Particle& p);
-	~Emisor();
-	bool update(float dt);
-	bool postUpdate();
+	virtual ~Emisor();
+	virtual bool update(float dt);
+	virtual bool postUpdate();
 	void setParticle(Particle& particle);
 	void enable();
 	void disable();
 	void destroy();
 };
 
+class FireEmisor : public Emisor
+{
+public:
+	Particle fire;
+	Particle smoke;
+
+	float smokeFrequence;
+	float smokeStart;
+	bool fireStarted = false;
+	iPoint smokeOffset;
+
+
+public:
+	FireEmisor(float time);
+	~FireEmisor();
+
+	bool update(float dt);
+	bool postUpdate();
+
+private:
+	float acumulator = 0.0f;
+};
 
 
 #endif
