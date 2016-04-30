@@ -168,6 +168,7 @@ Particle* ParticleManager::addParticle(const Particle& p, int x, int y, Uint32 s
 	if (audioFile != NULL)
 	{
 		part->fx = app->audio->loadFx(audioFile);
+		app->audio->playFx(part->fx);
 	}
 
 	part->timer.start();
@@ -177,29 +178,9 @@ Particle* ParticleManager::addParticle(const Particle& p, int x, int y, Uint32 s
 	return part;
 }
 
-Particle* ParticleManager::addParticle2(const Particle& p, int x, int y, Uint32 secLife, SDL_Texture* texture, unsigned int sfx, uint32 delay)
-{
-	Particle* part = NULL;
-
-	part = new Particle(p);
-	part->position.x = x - p.anim.peekCurrentFrame().w / 2;
-	part->position.y = y - p.anim.peekCurrentFrame().h / 2;
-	part->initialPosition = p.position;
-	part->image = texture;
-	part->alive = true;
-	part->life = secLife;
-	part->image = texture;
-	part->image = p.image;
-	part->fx = sfx;
-	part->timer.start();
-
-	particleList.push_back(part);
-
-	return part;
-}
 
 Emisor* ParticleManager::addEmisor(Particle& p, int x, int y, float emisorDuration, Uint32 particleLife, int particleVelocity,
-	float minAngle, float maxAngle, const char* imageFile)  // If all particles are load at creation point
+	float minAngle, float maxAngle, const char* imageFile,const char* audioFile) 
 {
 	Emisor* ret = NULL;
 
@@ -217,6 +198,18 @@ Emisor* ParticleManager::addEmisor(Particle& p, int x, int y, float emisorDurati
 		ret->particleEmited.image = app->tex->loadTexture(imageFile);
 	}
 
+	if (audioFile != NULL)
+	{
+		ret->fx = app->audio->loadFx(audioFile);
+		if (ret->fxPlayed == false)
+		{
+			ret->fxPlayed = true;
+			app->audio->playFx(ret->fx);
+		}
+		
+	}
+
+
 
 	ret->timer.start();
 	ret->active = ret->alive = true;
@@ -225,29 +218,6 @@ Emisor* ParticleManager::addEmisor(Particle& p, int x, int y, float emisorDurati
 
 	return ret;
 }
-
-Emisor* ParticleManager::addEmisor2(Particle& p, int x, int y, float emisorDuration, Uint32 particleLife, int particleVelocity,
-	float minAngle, float maxAngle, SDL_Texture* tex)  // If all particles are load at creation point
-{
-	Emisor* ret = NULL;
-
-	ret = new Emisor(p);
-	ret->position.set(x, y);
-	ret->duration = emisorDuration;
-	ret->particleEmited.life = particleLife;
-	ret->velocity = particleVelocity;
-	ret->minAngle = minAngle;
-	ret->maxAngle = maxAngle;
-	ret->particleEmited.image = tex;
-
-	ret->timer.start();
-	ret->active = ret->alive = true;
-
-	emisorList.push_back(ret);
-
-	return ret;
-}
-
 
 // Particle
 

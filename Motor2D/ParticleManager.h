@@ -35,7 +35,7 @@ public:
 		const char* audioFile = NULL);
 
 	Emisor* addEmisor(Particle& p, int x, int y, float emisorDuration, Uint32 particleLife, int particleVelocity, float minAngle = 0.0f, float maxAngle = 360.0f,
-		const char* imageFile = NULL);
+		const char* imageFile = NULL, const char* audioFile = NULL);
 
 	Particle* addParticle2(const Particle& p, int x, int y, Uint32 secLife = INT_MAX, SDL_Texture* texture = NULL,
 		unsigned int sfx = 0, uint32 delay = 0);
@@ -70,7 +70,7 @@ struct Particle
 	SDL_Rect	 quad;
 	bool alive;
 	bool active = true;
-	bool on = false;
+	bool on = false; 
 
 	Particle();
 	Particle(const Particle& p);
@@ -114,8 +114,6 @@ public:
 	void disable();
 	void destroy();
 };
-
-
 
 
 
