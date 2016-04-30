@@ -7,8 +7,7 @@ class Marine : public Unit
 {
 public:
 
-	//ROF
-	// It must have a review to do spritesheets with render flip into Animation module https://wiki.libsdl.org/SDL_RendererFlip
+	
 	Animation	idle_up;
 	Animation	idle_right_up;
 	Animation   idle_right;
@@ -58,7 +57,6 @@ public:
 		// Animations and FX
 		tex = app->tex->loadTexture("Units/Blue_Marine.png"); //Sprites/Animations etc..
 			
-		//#include "Marine_animations.h";
 		//---------------Idle Animation----------------
 		idle_right.frames.push_back({ 256, 0, 64, 64 });
 		idle_right.frames.push_back({ 256, 64, 64, 64 });
@@ -298,7 +296,9 @@ public:
 		dead.frames.push_back({ 320, 832, 64, 64 });
 		dead.frames.push_back({ 384, 832, 64, 64 });
 		dead.frames.push_back({ 448, 832, 64, 64 });
+		dead.loop = false;
 		dead.speed = 0.01f;
+
 		//----------------------------------------------
 
 		angle = 0;
@@ -357,6 +357,7 @@ public:
 				current_animation = &(*move_animation_pack.at(num_animation));
 				break;
 			}
+
 		case(DYING) :
 			{
 				current_animation = &dead;

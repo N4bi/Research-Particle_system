@@ -2,6 +2,7 @@
 #define __SCV_H__
 
 #include "Unit.h"
+#include "ParticleManager.h"
 
 class Scv : public Unit
 {
@@ -24,6 +25,11 @@ public:
 	Animation	repair_left_down;
 	Animation	repair_left;
 	Animation	repair_left_up;
+
+	Particle	walk_up_particle;
+
+	
+	
 
 	vector<Animation*> move_animation_pack;
 	vector<Animation*> repair_animation_pack;
@@ -114,8 +120,17 @@ public:
 		repair_right_down.frames.push_back({ 432, 128, 72, 64 });
 		repair_right_down.speed = 0.01f;
 		repair_right_down.loop = true;
-		repair_animation_pack.push_back(&repair_right_down);		
-		//----------------------------------------------
+		repair_animation_pack.push_back(&repair_right_down);	
+
+	//-----PARTICLES TEST------------------------------------------------
+
+		walk_up_particle.anim.frames.push_back({ 0, 72, 72, 72 });
+		walk_up_particle.anim.frames.push_back({ 0, 144, 72, 72 });
+		walk_up_particle.anim.frames.push_back({ 0, 216, 72, 72 });
+		walk_up_particle.anim.loop = true;
+		walk_up_particle.anim.speed = 0.01f;
+		walk_up_particle.anim.current_frame = 0.0f;
+	//---------------------------------------------------------------
 
 		angle = 225.f;
 		current_animation = &walk_down;
@@ -154,18 +169,31 @@ public:
 		switch (state)
 		{
 		case(IDLE) :
+		{
+					   int num_animation = angle / (360 / move_animation_pack.size());
+					   current_animation = &(*move_animation_pack.at(num_animation));
+					   break;
+		}
+
+			
+
 		case(MOVE) :
 		{
-			int num_animation = angle / (360 / move_animation_pack.size());
-			current_animation = &(*move_animation_pack.at(num_animation));
-			break;
+					   int num_animation = angle / (360 / move_animation_pack.size());
+					   current_animation = &(*move_animation_pack.at(num_animation));
+					   break;
 		}
+		
+		
 		case(REPAIR) :
 		{
 			int num_animation = angle / (360 / repair_animation_pack.size());
 			current_animation = &(*repair_animation_pack.at(num_animation));
+
 			break;
 		}
+
+		
 		// WHERE is this animation?
 		/*case(DYING) :
 		{
@@ -199,7 +227,6 @@ public:
 			{
 				repair();
 				timer_attack_delay.start();
-
 			}
 			break;
 		case DYING:
@@ -227,9 +254,9 @@ public:
 				}
 				else
 				{
-					target_to_repair->current_hp = target_to_repair->max_hp;
-					state = IDLE;
+					target_to_repair->current_hp = target_to_repair->max_hp;		
 					target_to_repair = NULL;
+					state = IDLE;
 					searchNearestEnemy();
 					
 				}

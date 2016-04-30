@@ -181,8 +181,7 @@ public:
 			}
 			break;
 		case MOVE:
-			if (has_target)
-				move(dt);
+			if (has_target) move(dt);
 			break;
 		case MOVE_ALERT:
 			if (timer_to_check.read() >= TIME_TO_CHECK)
@@ -191,8 +190,7 @@ public:
 					LOG("Enemy found");
 				timer_to_check.start();
 			}
-			if (has_target)
-				move(dt);
+			if (has_target) move(dt);
 			break;
 		case ATTACK:
 			if (timer_attack_delay.read() >= attack_delay)
@@ -214,6 +212,7 @@ public:
 		}
 		return true;
 	}
+
 };
 
 

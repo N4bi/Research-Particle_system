@@ -177,6 +177,27 @@ Particle* ParticleManager::addParticle(const Particle& p, int x, int y, Uint32 s
 	return part;
 }
 
+Particle* ParticleManager::addParticle2(const Particle& p, int x, int y, Uint32 secLife, SDL_Texture* texture, unsigned int sfx, uint32 delay)
+{
+	Particle* part = NULL;
+
+	part = new Particle(p);
+	part->position.x = x - p.anim.peekCurrentFrame().w / 2;
+	part->position.y = y - p.anim.peekCurrentFrame().h / 2;
+	part->initialPosition = p.position;
+	part->image = texture;
+	part->alive = true;
+	part->life = secLife;
+	part->image = texture;
+	part->image = p.image;
+	part->fx = sfx;
+	part->timer.start();
+
+	particleList.push_back(part);
+
+	return part;
+}
+
 Emisor* ParticleManager::addEmisor(Particle& p, int x, int y, float emisorDuration, Uint32 particleLife, int particleVelocity,
 	float minAngle, float maxAngle, const char* imageFile)  // If all particles are load at creation point
 {
@@ -205,6 +226,29 @@ Emisor* ParticleManager::addEmisor(Particle& p, int x, int y, float emisorDurati
 	return ret;
 }
 
+Emisor* ParticleManager::addEmisor2(Particle& p, int x, int y, float emisorDuration, Uint32 particleLife, int particleVelocity,
+	float minAngle, float maxAngle, SDL_Texture* tex)  // If all particles are load at creation point
+{
+	Emisor* ret = NULL;
+
+	ret = new Emisor(p);
+	ret->position.set(x, y);
+	ret->duration = emisorDuration;
+	ret->particleEmited.life = particleLife;
+	ret->velocity = particleVelocity;
+	ret->minAngle = minAngle;
+	ret->maxAngle = maxAngle;
+	ret->particleEmited.image = tex;
+
+	ret->timer.start();
+	ret->active = ret->alive = true;
+
+	emisorList.push_back(ret);
+
+	return ret;
+}
+
+
 // Particle
 
 
@@ -222,6 +266,7 @@ Particle::Particle(const Particle& p)
 	speed = p.speed;
 	alive = p.alive;
 	anim = p.anim;
+	image = p.image;
 }
 
 Particle::~Particle()
@@ -344,6 +389,8 @@ bool Emisor::update(float dt) // If particles are created each frame
 	if (alive && active)
 	{
 		Particle* q = app->particle->addParticle(particleEmited, position.x, position.y, particleEmited.life);
+		/*Particle* q = app->particle->addParticle2(particleEmited, position.x, position.y, particleEmited.life, particleEmited.image);*/
+
 		q->setSpeed(velocity, minAngle, maxAngle);
 
 		position.x += speed.x * dt / 1000;

@@ -8,11 +8,11 @@ class CommandCenter : public Building
 public:
 
 	Animation	idle;
+
 	Particle*   fire_particle_low;
 	Particle*	fire_particle_huge;
 	Particle*   explosion;
-	bool		particle_on;
-	bool		particle2_on;
+
 
 public:
 
@@ -64,36 +64,36 @@ public:
 		case IDLE:
 			if (current_hp < max_hp)
 			{
-				if (current_hp <= max_hp / 2 && particle_on == false)
+				if (current_hp <= max_hp / 2 && building_fire_low.on == false)
 				{
-					particle_on = true;
-					if (particle_on)
+					building_fire_low.on = true;
+					if (building_fire_low.on)
 					{
-						fire_particle_low = app->particle->addParticle(building_fire_low, pos.x + particles_offset.x, pos.y + particles_offset.y,INT_MAX,"Particles/Burn/Building_Burn_1.png");
+						fire_particle_low = app->particle->addParticle2(building_fire_low, pos.x + particles_offset.x, pos.y + particles_offset.y,INT_MAX, building_fire_low.image);
 					}
 
 				}
 
-				if (current_hp <= max_hp / 3 && particle2_on == false)
+				if (current_hp <= max_hp / 3 && building_fire_huge.on == false)
 				{
-					particle2_on = true;
-					if (particle2_on)
+					building_fire_huge.on = true;
+					if (building_fire_huge.on)
 					{
-						fire_particle_huge = app->particle->addParticle(building_fire_huge, center.x + particles_offset.x - 15, center.y + particles_offset.y - 15, INT_MAX, "Particles/Burn/Building_Burn_1.png");
+						fire_particle_huge = app->particle->addParticle2(building_fire_huge, center.x + particles_offset.x - 15, center.y + particles_offset.y - 15, INT_MAX, building_fire_huge.image);
 					}
 
 				}
 			}
 			else
 			{
-				if (particle_on == true)
+				if (building_fire_low.on == true)
 				{
-					particle_on = false;
+					building_fire_low.on = false;
 					fire_particle_low->destroyParticle();
 
-					if (particle2_on == true)
+					if (building_fire_huge.on == true)
 					{
-						particle2_on = false;
+						building_fire_huge.on = false;
 						fire_particle_huge->destroyParticle();
 					}
 				
@@ -109,18 +109,17 @@ public:
 		case ATTACK:
 		case DYING:
 			//current_animation = &dead;
-			particle_on = false;
-			particle2_on = false;
+			building_fire_low.on = false;
+			building_fire_huge.on = false;
 			// In debug mode lags the game a bit, if you try this in Release mode, the game runs perfect.
-			explosion = app->particle->addParticle(building_explosion, center.x, center.y, 1, "Particles/Explosion/Small_Explosion.png");
+			explosion = app->particle->addParticle2(building_explosion, center.x, center.y, 1, building_explosion.image);
+			
 			if (timer_to_check.read() >= time_to_die)
 			{
 					fire_particle_low->destroyParticle();
 					fire_particle_huge->destroyParticle();
 					to_delete = true;
 					coll->to_delete = true;
-					particle_on = false;
-					particle2_on = false;
 			}
 			break;
 		case REPAIR:

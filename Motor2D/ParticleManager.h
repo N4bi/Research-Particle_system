@@ -37,12 +37,17 @@ public:
 	Emisor* addEmisor(Particle& p, int x, int y, float emisorDuration, Uint32 particleLife, int particleVelocity, float minAngle = 0.0f, float maxAngle = 360.0f,
 		const char* imageFile = NULL);
 
+	Particle* addParticle2(const Particle& p, int x, int y, Uint32 secLife = INT_MAX, SDL_Texture* texture = NULL,
+		unsigned int sfx = 0, uint32 delay = 0);
+
+	Emisor* addEmisor2(Particle& p, int x, int y, float emisorDuration, Uint32 particleLife, int particleVelocity, float minAngle = 0.0f, float maxAngle = 360.0f,
+		SDL_Texture* tex = NULL);
+
 private:
 	SDL_Texture* texture;
 	std::list<Particle*> particleList;
 	std::list<Emisor*> emisorList;
 	std::string textureFile;
-
 
 	void setSpeed(float velocity, fPoint& speed, float minAngle = 0.0f, float maxAngle = 360.0f);
 
@@ -65,6 +70,7 @@ struct Particle
 	SDL_Rect	 quad;
 	bool alive;
 	bool active = true;
+	bool on = false;
 
 	Particle();
 	Particle(const Particle& p);
@@ -77,7 +83,6 @@ struct Particle
 	void disable();
 
 	void setSpeed(float velocity,float minAngle = 0.0f, float maxAngle = 360.0f);
-
 };
 
 

@@ -9,6 +9,7 @@
 #include "Audio.h"
 #include "Collision.h"
 #include "GameManager.h"
+#include "ParticleManager.h"
 #include "SDL\include\SDL.h"
 
 #define TIME_TO_CHECK 100.0f
