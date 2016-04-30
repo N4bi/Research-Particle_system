@@ -69,7 +69,7 @@ public:
 					building_fire_low.on = true;
 					if (building_fire_low.on)
 					{
-						fire_particle_low = app->particle->addParticle2(building_fire_low, pos.x + particles_offset.x, pos.y + particles_offset.y,INT_MAX, building_fire_low.image);
+						fire_particle_low = app->particle->addParticle(building_fire_low, pos.x + particles_offset.x, pos.y + particles_offset.y,INT_MAX,"Particles/Burn/Building_Burn_1.png");
 					}
 
 				}
@@ -79,7 +79,7 @@ public:
 					building_fire_huge.on = true;
 					if (building_fire_huge.on)
 					{
-						fire_particle_huge = app->particle->addParticle2(building_fire_huge, center.x + particles_offset.x - 15, center.y + particles_offset.y - 15, INT_MAX, building_fire_huge.image);
+						fire_particle_huge = app->particle->addParticle(building_fire_huge, center.x + particles_offset.x - 15, center.y + particles_offset.y - 15, INT_MAX, "Particles/Burn/Building_Burn_1.png");
 					}
 
 				}
@@ -112,7 +112,7 @@ public:
 			building_fire_low.on = false;
 			building_fire_huge.on = false;
 			// In debug mode lags the game a bit, if you try this in Release mode, the game runs perfect.
-			explosion = app->particle->addParticle2(building_explosion, center.x, center.y, 1, building_explosion.image);
+			explosion = app->particle->addParticle(building_explosion, center.x, center.y, 1, "Particles/Burn/Building_Burn_1.png");
 			
 			if (timer_to_check.read() >= time_to_die)
 			{

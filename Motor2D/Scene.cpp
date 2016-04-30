@@ -83,10 +83,17 @@ bool Scene::update(float dt)
 		p.anim.frames.push_back({ 0, 896, 128, 128 });
 		p.anim.frames.push_back({ 0, 1024, 128, 128 });
 		p.anim.speed = 0.05f;
-		p.anim.loop = true;
+		p.anim.loop = false;
 		p.anim.current_frame = 0.0f;
 
-		particle = app->particle->addParticle(p, m.x, m.y, 5, "Particles/Explosion/Small_Explosion.png");
+		float emisorDuration = 0.05f;
+		Uint32 particleLife = 4;
+		int particleVelocity = 10;
+		float min = 220.0f;
+		float max = 310.0f;
+
+		//particle = app->particle->addParticle(p, m.x, m.y, 5, "Particles/Explosion/Small_Explosion.png","Particles/explo1.wav");
+		Emisor* emitter = app->particle->addEmisor(p, m.x, m.y, emisorDuration, particleLife, particleVelocity, min, max, "Particles/Explosion/Small_Explosion.png", "Particles/explo1.wav");
 	}
 
 	if (app->input->getKey(SDL_SCANCODE_T) == KEY_DOWN)
@@ -110,8 +117,8 @@ bool Scene::update(float dt)
 		p.anim.current_frame = 0.0f;
 
 
-		float emisorDuration = 1.0f;
-		Uint32 particleLife = 5;
+		float emisorDuration = 0.07f;
+		Uint32 particleLife = 4;
 		int particleVelocity = 40;
 		float min = 0.0f;
 		float max = 360.0f;
@@ -123,7 +130,7 @@ bool Scene::update(float dt)
 		e->speed.set(0, 0);
 	}
 
-	if (app->input->getKey(SDL_SCANCODE_J) == KEY_DOWN)
+	if (app->input->getKey(SDL_SCANCODE_Y) == KEY_DOWN)
 	{
 		iPoint m;
 		app->input->getMousePosition(m);
@@ -170,16 +177,18 @@ bool Scene::update(float dt)
 		p.anim.frames.push_back({ 640, 512, 128, 128 });
 		p.anim.frames.push_back({ 768, 512, 128, 128 });
 		p.anim.frames.push_back({ 896, 512, 128, 128 });
-		p.anim.speed = 0.01f;
+		//p.anim.speed = 0.1f;
+		//p.anim.speed = 0.5f;
+		p.anim.speed = 0.05f;
 		p.anim.loop = false;
 		p.anim.current_frame = 0.0f;
 
 
-		float emisorDuration = 1.0f;
+		float emisorDuration = 0.05f;
 		Uint32 particleLife = 5;
-		int particleVelocity = 50;
-		float min = 0.0f;
-		float max = 360.0f;
+		int particleVelocity = 300;
+		float min = 220.0f;
+		float max = 310.0f;
 
 		/*particle = app->particle->addParticle(p, m.x, m.y, 5, "particles/explosion/explosion.png");*/
 
