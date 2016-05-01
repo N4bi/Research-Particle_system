@@ -44,6 +44,8 @@ bool ParticleManager::update(float dt)
 {
 	bool ret = true;
 
+	// TODO 2: Iterate the particles list, if update returns false, delete the particle. 
+
 	std::list<Particle*>::iterator tmp = particleList.begin();
 
 	while (tmp != particleList.end())
@@ -58,6 +60,8 @@ bool ParticleManager::update(float dt)
 			++tmp;
 		}
 	}
+
+	// TODO 2: Iterate the emisor list, if update returns false, delete the particle. 
 
 	std::list<Emisor*>::iterator tmp2 = emisorList.begin();
 
@@ -82,12 +86,16 @@ bool ParticleManager::postUpdate()
 {
 	bool ret = true;
 
+	//TODO 2: Iterate the particle list and call postUpdate
+
 	std::list<Particle*>::reverse_iterator tmp = particleList.rbegin();
 
 	for (; tmp != particleList.rend(); ++tmp)
 	{
 		(*tmp)->postUpdate();
 	}
+
+	//TODO 2: Iterate the emisor list and call postUpdate 
 
 	std::list<Emisor*>::iterator tmp2 = emisorList.begin();
 
@@ -104,12 +112,16 @@ bool ParticleManager::cleanUp()
 	LOG("Particle Manager: CleanUp");
 	app->tex->unloadTexture(texture);
 
+	//TODO 2: Iterate the particle list and clear, release the particle and clear the list.
+
 	std::list<Particle*>::iterator tmp = particleList.begin();
 
 	for (; tmp != particleList.end(); ++tmp)
 		RELEASE((*tmp));
 
 	particleList.clear();
+
+	//TODO 2: Iterate the emisor list and clear, release the particle and clear the list.
 
 	std::list<Emisor*>::iterator tmp2 = emisorList.begin();
 
@@ -120,6 +132,8 @@ bool ParticleManager::cleanUp()
 
 	return true;
 }
+
+//TODO 2.1 : Uncomment when you finished TODO 2
 
 bool ParticleManager::cleanActiveParticles()
 {
@@ -181,6 +195,7 @@ Particle* ParticleManager::addParticle(const Particle& p, int x, int y, Uint32 s
 	part->fx = sfx;
 	part->timer.start();
 
+	//TODO 3: insert the particle in the particleList
 	particleList.push_back(part);
 
 	return part;
@@ -203,6 +218,7 @@ Emisor* ParticleManager::addEmisor(Particle& p, int x, int y, float emisorDurati
 	ret->timer.start();
 	ret->active = ret->alive = true;
 
+	//TODO 3: insert the emisor in the emisorLists
 	emisorList.push_back(ret);
 
 	return ret;
@@ -218,6 +234,7 @@ FireEmisor* ParticleManager::addFire(int x, int y, float duration)
 	ret->timer.start();
 	ret->active = ret->alive = true;
 
+	//TODO 3: insert the emisor in the emisorList
 	emisorList.push_back(ret);
 
 	return ret;
@@ -233,6 +250,7 @@ BurstEmisor* ParticleManager::addBurst(int x,int y)
 	ret->timer.start();
 	ret->active = ret->alive = true;
 
+	//TODO 3: insert the emisor in the emisorList
 	emisorList.push_back(ret);
 
 	return ret;
@@ -281,6 +299,7 @@ bool Particle::update(float dt)
 
 	if (life > 0)
 	{
+		// TODO 4: if timer is bigger than the life of the particle OR particle isn't alive, then return false
 		if (timer.read() >= life * 1000 || alive == false)
 		{
 			ret = false;
@@ -306,6 +325,7 @@ bool Particle::postUpdate()
 	{
 		if (image != NULL)
 		{
+			//TODO 5: Get animation frame and then blit. 
 			SDL_Rect sect = anim.getCurrentFrame();
 			app->render->blit(image, position.x, position.y, &sect);
 		}
@@ -367,6 +387,7 @@ bool Emisor::update(float dt) // If particles are created each frame
 {
 	bool ret = true;
 
+	// TODO 4: if timer is bigger than the life of the emisor OR emisor isn't alive, then return false
 	if (timer.read() >= duration * 1000 || alive == false)
 	{
 		ret = false;
@@ -374,6 +395,7 @@ bool Emisor::update(float dt) // If particles are created each frame
 
 	if (alive && active)
 	{
+		// TODO 5: Create a new particle with the particleEmited info and set his speed with method setSpeed
 		Particle* q = app->particle->addParticle(particleEmited, position.x, position.y, particleEmited.life);
 		q->setSpeed(velocity, minAngle, maxAngle);
 

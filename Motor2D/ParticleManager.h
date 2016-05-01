@@ -48,9 +48,11 @@ public:
 
 private:
 	SDL_Texture* texture;
+	std::string textureFile;
+
+	//TODO 1: Create two list, one with particles and another one with emisors. Call the particle list "particleList" and the emisor list "emisorList"
 	std::list<Particle*> particleList;
 	std::list<Emisor*> emisorList;
-	std::string textureFile;
 
 	bool loadParticlesFile(pugi::xml_document& file);
 

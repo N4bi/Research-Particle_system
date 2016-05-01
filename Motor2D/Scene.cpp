@@ -95,6 +95,7 @@ bool Scene::update(float dt)
 		float min_angle = 220.0f;
 		float max_angle = 310.0f;
 
+		// TODO 6: Uncomment this and try diferent values on attributes 
 		app->particle->addEmisor(p, m.x, m.y, emisorDuration, particleLife, particleVelocity, min_angle, max_angle, p.image);
 	}
 
@@ -126,12 +127,14 @@ bool Scene::update(float dt)
 		float min_angle = 0.0f;
 		float max_angle = 360.0f;
 
-
+		// TODO 6: Uncomment this and try diferent values on attributes 
 		Emisor* e = app->particle->addEmisor(p, m.x, m.y, emisorDuration, particleLife, 
 			particleVelocity, min_angle, max_angle, p.image);
 	
 		e->speed.set(0, 0);
 	}
+
+	// TODO 7: Uncomment this and try to change values in particles.xml
 
 	if (app->input->getKey(SDL_SCANCODE_R) == KEY_DOWN)
 	{
