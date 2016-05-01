@@ -233,6 +233,9 @@
     <Xml Include="Game\config.xml">
       <Filter>Resources</Filter>
     </Xml>
+    <Xml Include="Game\Particles\particles.xml">
+      <Filter>Resources</Filter>
+    </Xml>
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md">

@@ -8,6 +8,8 @@
 #include "Timer.h"
 #include "Audio.h"
 
+// PARTICLE MANAGER---------------
+
 ParticleManager::ParticleManager() : Module()
 {
 
@@ -149,48 +151,7 @@ bool ParticleManager::loadParticlesFile(pugi::xml_document& file)
 	return ret;
 }
 
-Particle* ParticleManager::addParticle(const Particle& p, int x, int y, Uint32 secLife, const char* imageFile, const char* audioFile)
-{
-	Particle* part = NULL;
-
-	part = new Particle(p);
-	part->position.x = x - p.anim.peekCurrentFrame().w / 2;
-	part->position.y = y - p.anim.peekCurrentFrame().h / 2;
-	part->initialPosition = p.position;
-	part->image = texture;
-	part->alive = true;
-	part->life = secLife;
-
-	if (imageFile != NULL)
-	{
-		app->tex->unloadTexture(part->image);
-		part->image = app->tex->loadTexture(imageFile);
-	}
-	else if (p.image != NULL)
-	{
-		part->image = p.image;
-	}
-	else
-	{
-		part->quad.w = part->quad.h = 20;
-		part->quad.x = x;
-		part->quad.y = y;
-	}
-
-	if (audioFile != NULL)
-	{
-		part->fx = app->audio->loadFx(audioFile);
-		app->audio->playFx(part->fx);
-	}
-
-	part->timer.start();
-
-	particleList.push_back(part);
-
-	return part;
-}
-
-Particle* ParticleManager::addParticle2(const Particle& p, int x, int y, Uint32 secLife, SDL_Texture* texture, unsigned int sfx, uint32 delay)
+Particle* ParticleManager::addParticle(const Particle& p, int x, int y, Uint32 secLife, SDL_Texture* texture, unsigned int sfx, uint32 delay)
 {
 	Particle* part = NULL;
 
@@ -214,46 +175,6 @@ Particle* ParticleManager::addParticle2(const Particle& p, int x, int y, Uint32 
 }
 
 Emisor* ParticleManager::addEmisor(Particle& p, int x, int y, float emisorDuration, Uint32 particleLife, int particleVelocity,
-	float minAngle, float maxAngle, const char* imageFile,const char* audioFile) 
-{
-	Emisor* ret = NULL;
-
-	ret = new Emisor(p);
-	ret->position.set(x, y);
-	ret->duration = emisorDuration;
-	ret->particleEmited.life = particleLife;
-	ret->velocity = particleVelocity;
-	ret->minAngle = minAngle;
-	ret->maxAngle = maxAngle;
-
-	if (imageFile != NULL)
-	{
-		app->tex->unloadTexture(ret->particleEmited.image);
-		ret->particleEmited.image = app->tex->loadTexture(imageFile);
-	}
-
-	if (audioFile != NULL)
-	{
-		ret->fx = app->audio->loadFx(audioFile);
-		if (ret->fxPlayed == false)
-		{
-			ret->fxPlayed = true;
-			app->audio->playFx(ret->fx);
-		}
-		
-	}
-
-
-
-	ret->timer.start();
-	ret->active = ret->alive = true;
-
-	emisorList.push_back(ret);
-
-	return ret;
-}
-
-Emisor* ParticleManager::addEmisor2(Particle& p, int x, int y, float emisorDuration, Uint32 particleLife, int particleVelocity,
 	float minAngle, float maxAngle, SDL_Texture* tex)  // If all particles are load at creation point
 {
 	Emisor* ret = NULL;
@@ -304,8 +225,9 @@ BurstEmisor* ParticleManager::addBurst(int x,int y)
 
 	return ret;
 }
+//-----------------------------------------
 
-// Particle
+// PARTICLE--------------------------------
 
 
 Particle::Particle() : fx(0), life(0), fxPlayed(false), alive(false)
@@ -375,10 +297,6 @@ bool Particle::postUpdate()
 			SDL_Rect sect = anim.getCurrentFrame();
 			app->render->blit(image, position.x, position.y, &sect);
 		}
-		else
-		{
-			app->render->DrawQuad(quad, 255, 0, 0);
-		}
 
 		if (fxPlayed == false)
 		{
@@ -407,11 +325,10 @@ void Particle::setSpeed(float velocity, float minAngle, float maxAngle)
 	float angle = minAngle + (rand() % (int)(maxAngle - minAngle));
 	speed.x = velocity * cos(angle * (PI / 180));
 	speed.y = velocity * sin(angle * (PI / 180));
-	//LOG("Angle: %f", angle);
-	//LOG("Speed x: %f. Speed y: %f", speed.x, speed.y);
 }
+//-----------------------------------------------------
 
-// Emisor
+// EMISOR----------------------------------------------
 
 Emisor::Emisor()
 {
@@ -423,6 +340,7 @@ Emisor::Emisor()
 Emisor::Emisor(Particle& p)
 {
 	particleEmited = p;
+	fx = p.fx;
 	position.setZero();
 	speed.setZero();
 	fxPlayed = false;
@@ -488,8 +406,9 @@ void Emisor::destroy()
 {
 	alive = false;
 }
+//---------------------------------------------------------
 
-// FireEmisor
+// FIRE EMISOR---------------------------------------------
 FireEmisor::FireEmisor(float time) : Emisor()
 {
 	duration = time;
@@ -563,13 +482,13 @@ bool FireEmisor::update(float dt)
 		if (!fireStarted)
 		{
 			fireStarted = true;
-			app->particle->addParticle2(fire, position.x, position.y, fire.life);
+			app->particle->addParticle(fire, position.x, position.y, fire.life);
 		}
 		if (timer.read() >= smokeStart * 1000)
 		{
 			if (acumulator >= smokeFrequence * 1000)
 			{
-				app->particle->addParticle2(smoke, position.x + smokeOffset.x, position.y + smokeOffset.y, smoke.life);
+				app->particle->addParticle(smoke, position.x + smokeOffset.x, position.y + smokeOffset.y, smoke.life);
 				acumulator = 0.0f;
 			}
 			acumulator += dt;
@@ -598,8 +517,9 @@ bool FireEmisor::postUpdate()
 
 	return ret;
 }
+//---------------------------------------------------
 
-// BurstEmisor
+//BURST EMISOR---------------------------------------
 BurstEmisor::BurstEmisor() : Emisor()
 {
 
@@ -654,7 +574,7 @@ bool BurstEmisor::update(float dt)
 		if (!burstStarted)
 		{
 			burstStarted = true;
-			app->particle->addEmisor2(burst, position.x, position.y, emisor_burst.duration, burst.life, emisor_burst.velocity, emisor_burst.minAngle,emisor_burst.maxAngle,burst.image);
+			app->particle->addEmisor(burst, position.x, position.y, emisor_burst.duration, burst.life, emisor_burst.velocity, emisor_burst.minAngle,emisor_burst.maxAngle,burst.image);
 		}
 		position.x += speed.x * dt / 1000;
 		position.y += speed.y * dt / 1000;
@@ -679,4 +599,4 @@ bool BurstEmisor::postUpdate()
 
 	return ret;
 }
-
+//----------------------------------------------------------------------

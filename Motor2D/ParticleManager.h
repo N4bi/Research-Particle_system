@@ -34,16 +34,10 @@ public:
 
 	bool cleanActiveParticles();
 
-	Particle* addParticle(const Particle& p, int x, int y, Uint32 secLife = INT_MAX, const char* imageFile = NULL,
-		const char* audioFile = NULL);
-
-	Emisor* addEmisor(Particle& p, int x, int y, float emisorDuration, Uint32 particleLife, int particleVelocity, float minAngle = 0.0f, float maxAngle = 360.0f,
-		const char* imageFile = NULL, const char* audioFile = NULL);
-
-	Particle* addParticle2(const Particle& p, int x, int y, Uint32 secLife = INT_MAX, SDL_Texture* texture = NULL,
+	Particle* addParticle(const Particle& p, int x, int y, Uint32 secLife = INT_MAX, SDL_Texture* texture = NULL,
 		unsigned int sfx = 0, uint32 delay = 0);
 
-	Emisor* addEmisor2(Particle& p, int x, int y, float emisorDuration, Uint32 particleLife, int particleVelocity, float minAngle = 0.0f, float maxAngle = 360.0f,
+	Emisor* addEmisor(Particle& p, int x, int y, float emisorDuration, Uint32 particleLife, int particleVelocity, float minAngle = 0.0f, float maxAngle = 360.0f,
 		SDL_Texture* tex = NULL);
 
 	FireEmisor* addFire(int x, int y, float duration);
@@ -74,7 +68,6 @@ struct Particle
 	bool				fxPlayed;
 	Timer				timer;
 	SDL_Texture*		image = NULL;
-	SDL_Rect		    quad;
 	bool				alive;
 	bool				active = true;
 	bool			    on = false; 
@@ -104,7 +97,6 @@ public:
 	bool		alive;
 	uint	    fx;
 	bool		fxPlayed;
-	float		frequance; //Particle ammount per second
 	Particle    particleEmited;
 	float	    velocity;
 	float		minAngle;

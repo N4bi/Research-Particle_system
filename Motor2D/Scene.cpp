@@ -8,6 +8,7 @@
 #include "PathFinding.h"
 #include "Scene.h"
 #include "ParticleManager.h"
+#include "Textures.h"
 
 #include "GuiImage.h"
 #include "GuiLabel.h"
@@ -82,6 +83,8 @@ bool Scene::update(float dt)
 		m = app->render->screenToWorld(m.x, m.y);
 
 		Particle p;
+		p.image = app->tex->loadTexture("Particles/Explosion/Small_Explosion.png");
+		p.fx = app->audio->loadFx("Particles/explo1.wav");
 		p.speed.set(0, 0);
 		p.anim.frames.push_back({ 0, 0, 128, 128 });
 		p.anim.frames.push_back({ 0, 128, 128, 128 });
@@ -102,7 +105,7 @@ bool Scene::update(float dt)
 		float min = 220.0f;
 		float max = 310.0f;
 
-		app->particle->addEmisor(p, m.x, m.y, emisorDuration, particleLife, particleVelocity, min, max, "Particles/Explosion/Small_Explosion.png");
+		app->particle->addEmisor(p, m.x, m.y, emisorDuration, particleLife, particleVelocity, min, max, p.image);
 	}
 
 	if (app->input->getKey(SDL_SCANCODE_T) == KEY_DOWN)
@@ -112,6 +115,7 @@ bool Scene::update(float dt)
 		m = app->render->screenToWorld(m.x, m.y);
 
 		Particle p;
+		p.image = app->tex->loadTexture("Particles/Explosion/fire.png");
 		p.anim.frames.push_back({ 0, 0, 78, 156 });
 		p.anim.frames.push_back({ 78, 0, 78, 156 });
 		p.anim.frames.push_back({ 156, 0, 78, 156 });
@@ -134,7 +138,7 @@ bool Scene::update(float dt)
 
 
 		Emisor* e = app->particle->addEmisor(p, m.x, m.y, emisorDuration, particleLife, 
-			particleVelocity, min, max, "Particles/Explosion/fire.png");
+			particleVelocity, min, max, p.image);
 	
 		e->speed.set(0, 0);
 	}
