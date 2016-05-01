@@ -145,58 +145,7 @@ bool Scene::update(float dt)
 		app->input->getMousePosition(m);
 		m = app->render->screenToWorld(m.x, m.y);
 
-		Particle p;
-		p.anim.frames.push_back({ 0, 0, 128, 128 });
-		p.anim.frames.push_back({ 128, 0, 128, 128 });
-		p.anim.frames.push_back({ 256, 0, 128, 128 });
-		p.anim.frames.push_back({ 384, 0, 128, 128 });
-		p.anim.frames.push_back({ 512, 0, 128, 128 });
-		p.anim.frames.push_back({ 640, 0, 128, 128 });
-		p.anim.frames.push_back({ 768, 0, 128, 128 });
-		p.anim.frames.push_back({ 896, 0, 128, 128 });
-		p.anim.frames.push_back({ 0, 128, 128, 128 });
-		p.anim.frames.push_back({ 128, 128, 128, 128 });
-		p.anim.frames.push_back({ 256, 128, 128, 128 });
-		p.anim.frames.push_back({ 384, 128, 128, 128 });
-		p.anim.frames.push_back({ 512, 128, 128, 128 });
-		p.anim.frames.push_back({ 640, 128, 128, 128 });
-		p.anim.frames.push_back({ 768, 128, 128, 128 });
-		p.anim.frames.push_back({ 896, 128, 128, 128 });
-		p.anim.frames.push_back({ 0, 256, 128, 128 });
-		p.anim.frames.push_back({ 128, 256, 128, 128 });
-		p.anim.frames.push_back({ 256, 256, 128, 128 });
-		p.anim.frames.push_back({ 384, 256, 128, 128 });
-		p.anim.frames.push_back({ 512, 256, 128, 128 });
-		p.anim.frames.push_back({ 640, 256, 128, 128 });
-		p.anim.frames.push_back({ 768, 256, 128, 128 });
-		p.anim.frames.push_back({ 896, 256, 128, 128 });
-		p.anim.frames.push_back({ 0, 384, 128, 128 });
-		p.anim.frames.push_back({ 128, 384, 128, 128 });
-		p.anim.frames.push_back({ 256, 384, 128, 128 });
-		p.anim.frames.push_back({ 384, 384, 128, 128 });
-		p.anim.frames.push_back({ 512, 384, 128, 128 });
-		p.anim.frames.push_back({ 640, 384, 128, 128 });
-		p.anim.frames.push_back({ 768, 384, 128, 128 });
-		p.anim.frames.push_back({ 896, 384, 128, 128 });
-		p.anim.frames.push_back({ 0, 512, 128, 128 });
-		p.anim.frames.push_back({ 128, 512, 128, 128 });
-		p.anim.frames.push_back({ 256, 512, 128, 128 });
-		p.anim.frames.push_back({ 384, 512, 128, 128 });
-		p.anim.frames.push_back({ 512, 512, 128, 128 });
-		p.anim.frames.push_back({ 640, 512, 128, 128 });
-		p.anim.frames.push_back({ 768, 512, 128, 128 });
-		p.anim.frames.push_back({ 896, 512, 128, 128 });
-		p.anim.speed = 0.05f;
-		p.anim.loop = false;
-		p.anim.current_frame = 0.0f;
-
-		float emisorDuration = 0.1f;
-		Uint32 particleLife = 5;
-		int particleVelocity = 300;
-		float min = 220.0f;
-		float max = 310.0f;
-
-		app->particle->addEmisor(p, m.x, m.y, emisorDuration, particleLife,particleVelocity, min, max, "Particles/Explosion/explosion.png");
+		app->particle->addBurst(m.x, m.y, 0.1f,300.0f,265.0f,275.0f);
 	}
 
 	return true;

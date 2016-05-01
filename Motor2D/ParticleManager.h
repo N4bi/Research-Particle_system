@@ -14,6 +14,7 @@ class Timer;
 class Particle;
 class Emisor;
 class FireEmisor;
+class BurstEmisor;
 
 class ParticleManager : public Module
 {
@@ -46,6 +47,8 @@ public:
 		SDL_Texture* tex = NULL);
 
 	FireEmisor* addFire(int x, int y, float duration);
+
+	BurstEmisor* addBurst(int x, int y, float duration, float velocity, float minAngle, float maxAngle);
 
 private:
 	SDL_Texture* texture;
@@ -124,6 +127,7 @@ class FireEmisor : public Emisor
 public:
 	Particle	fire;
 	Particle	smoke;
+	
 
 	float		smokeFrequence;
 	float		smokeStart;
@@ -140,6 +144,26 @@ public:
 
 private:
 	float	   acumulator = 0.0f;
+};
+
+class BurstEmisor : public Emisor
+{
+public:
+	Particle	burst;
+	Emisor		emisor_burst;
+
+
+	bool	    burstStarted = false;
+
+
+
+public:
+	BurstEmisor(float time, float velocity, float minAngle, float maxAngle);
+	~BurstEmisor();
+
+	bool update(float dt);
+	bool postUpdate();
+
 };
 
 

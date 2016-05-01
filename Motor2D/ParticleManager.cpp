@@ -293,6 +293,24 @@ FireEmisor* ParticleManager::addFire(int x, int y, float duration)
 	return ret;
 }
 
+BurstEmisor* ParticleManager::addBurst(int x, int y, float duration, float velocity, float minAngle, float maxAngle)
+{
+	BurstEmisor* ret = NULL;
+
+	ret = new BurstEmisor(duration,velocity,minAngle,maxAngle);
+	ret->position.set(x, y);
+	ret->velocity = velocity;
+	ret->minAngle = minAngle;
+	ret->maxAngle = maxAngle;
+
+	ret->timer.start();
+	ret->active = ret->alive = true;
+
+	emisorList.push_back(ret);
+
+	return ret;
+}
+
 // Particle
 
 
@@ -559,6 +577,110 @@ bool FireEmisor::update(float dt)
 }
 
 bool FireEmisor::postUpdate()
+{
+	bool ret = true;
+
+	if (alive && active)
+	{
+		if (!fxPlayed)
+		{
+			fxPlayed = true;
+			app->audio->playFx(fx);
+		}
+	}
+
+	return ret;
+}
+
+// BurstEmisor
+BurstEmisor::BurstEmisor(float time,float velocity, float minAngle,float maxAngle) : Emisor()
+{
+
+
+	burst.anim.frames.push_back({ 0, 0, 128, 128 });
+	burst.anim.frames.push_back({ 128, 0, 128, 128 });
+	burst.anim.frames.push_back({ 256, 0, 128, 128 });
+	burst.anim.frames.push_back({ 384, 0, 128, 128 });
+	burst.anim.frames.push_back({ 512, 0, 128, 128 });
+	burst.anim.frames.push_back({ 640, 0, 128, 128 });
+	burst.anim.frames.push_back({ 768, 0, 128, 128 });
+	burst.anim.frames.push_back({ 896, 0, 128, 128 });
+	burst.anim.frames.push_back({ 0, 128, 128, 128 });
+	burst.anim.frames.push_back({ 128, 128, 128, 128 });
+	burst.anim.frames.push_back({ 256, 128, 128, 128 });
+	burst.anim.frames.push_back({ 384, 128, 128, 128 });
+	burst.anim.frames.push_back({ 512, 128, 128, 128 });
+	burst.anim.frames.push_back({ 640, 128, 128, 128 });
+	burst.anim.frames.push_back({ 768, 128, 128, 128 });
+	burst.anim.frames.push_back({ 896, 128, 128, 128 });
+	burst.anim.frames.push_back({ 0, 256, 128, 128 });
+	burst.anim.frames.push_back({ 128, 256, 128, 128 });
+	burst.anim.frames.push_back({ 256, 256, 128, 128 });
+	burst.anim.frames.push_back({ 384, 256, 128, 128 });
+	burst.anim.frames.push_back({ 512, 256, 128, 128 });
+	burst.anim.frames.push_back({ 640, 256, 128, 128 });
+	burst.anim.frames.push_back({ 768, 256, 128, 128 });
+	burst.anim.frames.push_back({ 896, 256, 128, 128 });
+	burst.anim.frames.push_back({ 0, 384, 128, 128 });
+	burst.anim.frames.push_back({ 128, 384, 128, 128 });
+	burst.anim.frames.push_back({ 256, 384, 128, 128 });
+	burst.anim.frames.push_back({ 384, 384, 128, 128 });
+	burst.anim.frames.push_back({ 512, 384, 128, 128 });
+	burst.anim.frames.push_back({ 640, 384, 128, 128 });
+	burst.anim.frames.push_back({ 768, 384, 128, 128 });
+	burst.anim.frames.push_back({ 896, 384, 128, 128 });
+	burst.anim.frames.push_back({ 0, 512, 128, 128 });
+	burst.anim.frames.push_back({ 128, 512, 128, 128 });
+	burst.anim.frames.push_back({ 256, 512, 128, 128 });
+	burst.anim.frames.push_back({ 384, 512, 128, 128 });
+	burst.anim.frames.push_back({ 512, 512, 128, 128 });
+	burst.anim.frames.push_back({ 640, 512, 128, 128 });
+	burst.anim.frames.push_back({ 768, 512, 128, 128 });
+	burst.anim.frames.push_back({ 896, 512, 128, 128 });
+	burst.anim.speed = 0.05f;
+	burst.anim.loop = false;
+	burst.anim.current_frame = 0.0f;
+	burst.setSpeed(0, 0);
+	burst.image = app->tex->loadTexture("Particles/Explosion/explosion.png");
+	burst.life = duration;
+
+	emisor_burst.duration = time;
+	emisor_burst.velocity = velocity;
+	emisor_burst.minAngle = minAngle;
+	emisor_burst.maxAngle = maxAngle;
+
+
+}
+
+BurstEmisor::~BurstEmisor()
+{
+
+}
+
+bool BurstEmisor::update(float dt)
+{
+	bool ret = true;
+
+	if (timer.read() >= duration * 1000 || alive == false)
+	{
+		ret = false;
+	}
+	if (alive && active)
+	{
+		if (!burstStarted)
+		{
+			burstStarted = true;
+			app->particle->addEmisor2(burst, position.x, position.y, emisor_burst.duration, burst.life, emisor_burst.velocity, emisor_burst.minAngle,emisor_burst.maxAngle,burst.image);
+		}
+		position.x += speed.x * dt / 1000;
+		position.y += speed.y * dt / 1000;
+	}
+
+
+	return ret;
+}
+
+bool BurstEmisor::postUpdate()
 {
 	bool ret = true;
 
