@@ -44,12 +44,12 @@ bool ParticleManager::update(float dt)
 {
 	bool ret = true;
 
-	// TODO 2: Iterate the particles list, if update returns false, delete de particle. 
+	// TODO 2: Iterate the particles list, if update returns false, delete the particle. 
 
 
 
 
-	// TODO 2: Iterate the emisor list, if update returns false, delete de particle. 
+	// TODO 2: Iterate the emisor list, if update returns false, delete the emisor. 
 
 
 
@@ -75,10 +75,10 @@ bool ParticleManager::cleanUp()
 {
 	LOG("Particle Manager: CleanUp");
 	app->tex->unloadTexture(texture);
-	//TODO 2: Iterate the particle list and clear, release the particle and clear the list.
+	//TODO 2: Iterate the particle list, release the particle and clear the list.
 
 
-	//TODO 2: Iterate the emisor list and clear, release the particle and clear the list.
+	//TODO 2: Iterate the emisor list, release the emisor and clear the list.
 
 
 	return true;
