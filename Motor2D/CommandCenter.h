@@ -112,7 +112,7 @@ public:
 			building_fire_low.on = false;
 			building_fire_huge.on = false;
 			// In debug mode lags the game a bit, if you try this in Release mode, the game runs perfect.
-			explosion = app->particle->addParticle(building_explosion, center.x, center.y, 1, "Particles/Burn/Building_Burn_1.png");
+			explosion = app->particle->addParticle(building_explosion, center.x, center.y, 1, "Particles/Explosion/Small_Explosion.png");
 			
 			if (timer_to_check.read() >= time_to_die)
 			{

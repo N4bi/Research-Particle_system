@@ -493,12 +493,12 @@ FireEmisor::FireEmisor(float time) : Emisor()
 	int fireFPR = fire1.child("fire_anim").attribute("frames_per_row").as_int();
 	int fireFPC = fire1.child("fire_anim").attribute("frames_per_column").as_int();*/
 
-	fire.anim.setAnimations(0, 0, 64, 64, 8, 4, 8*4);
+	fire.anim.setAnimations(0, 219, 119, 197, 20, 1, 20);
 	fire.anim.speed = 0.01f;
 	fire.anim.loop = true;
 	fire.anim.current_frame = 0.0f;
 	fire.speed.set(0, 0);
-	fire.image = app->tex->loadTexture("Particles/Flame/torusflame1.png");
+	fire.image = app->tex->loadTexture("Particles/Flame/flameLargeDiablo2.png");
 	fire.life = duration;
 
 	/*int smokeX = fire1.child("smoke_anim").attribute("x").as_int();
@@ -508,15 +508,15 @@ FireEmisor::FireEmisor(float time) : Emisor()
 	int smokeFPR = fire1.child("smoke_anim").attribute("frames_per_row").as_int();
 	int smokeFPC = fire1.child("smoke_anim").attribute("frames_per_column").as_int();*/
 
-	smoke.anim.setAnimations(0, 0, 64, 64, 8, 4, 8 * 4);
+	smoke.anim.setAnimations(0, 119, 119, 197, 20, 1, 20);
 	smoke.anim.speed = 0.02f;
-	smoke.anim.loop = true;
+	smoke.anim.loop = false;
 	smoke.anim.current_frame = 0.0f;
-	smoke.speed.set(-100, -100);
+	smoke.speed.set(0, -100);
 	smokeFrequence = 1.0f;
 	smokeStart = 0.0f;
 	smokeOffset.set(0, -1);
-	smoke.image = app->tex->loadTexture("Particles/Flame/smokeball.png");
+	smoke.image = app->tex->loadTexture("Particles/Flame/smokeLargeDiablo2.png");
 	smoke.life = 2.0f;
 }
 
@@ -573,3 +573,4 @@ bool FireEmisor::postUpdate()
 
 	return ret;
 }
+

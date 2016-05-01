@@ -62,19 +62,19 @@ public:
 
 struct Particle
 {
-	Animation anim;
-	unsigned int fx; //This is for audio
-	fPoint position;
-	fPoint initialPosition;
-	fPoint speed;
-	Uint32 life;	// Time the particle life
-	bool fxPlayed;
-	Timer timer;
-	SDL_Texture* image = NULL;
-	SDL_Rect	 quad;
-	bool alive;
-	bool active = true;
-	bool on = false; 
+	Animation			anim;
+	unsigned int		fx; //This is for audio
+	fPoint				position;
+	fPoint				initialPosition;
+	fPoint				speed;
+	Uint32				life;	// Time the particle life
+	bool				fxPlayed;
+	Timer				timer;
+	SDL_Texture*		image = NULL;
+	SDL_Rect		    quad;
+	bool				alive;
+	bool				active = true;
+	bool			    on = false; 
 
 	Particle();
 	Particle(const Particle& p);
@@ -93,19 +93,19 @@ struct Particle
 class Emisor
 {
 public:
-	fPoint position;
-	fPoint speed;
-	float duration;
-	Timer timer;
-	bool active;
-	bool alive;
-	uint fx;
-	bool fxPlayed;
-	float frequance; //Particle ammount per second
-	Particle particleEmited;
-	float velocity;
-	float minAngle;
-	float maxAngle;
+	fPoint		position;
+	fPoint		speed;
+	float		duration;
+	Timer		timer;
+	bool		active;
+	bool		alive;
+	uint	    fx;
+	bool		fxPlayed;
+	float		frequance; //Particle ammount per second
+	Particle    particleEmited;
+	float	    velocity;
+	float		minAngle;
+	float		maxAngle;
 
 public:
 	Emisor();
@@ -122,13 +122,13 @@ public:
 class FireEmisor : public Emisor
 {
 public:
-	Particle fire;
-	Particle smoke;
+	Particle	fire;
+	Particle	smoke;
 
-	float smokeFrequence;
-	float smokeStart;
-	bool fireStarted = false;
-	iPoint smokeOffset;
+	float		smokeFrequence;
+	float		smokeStart;
+	bool	    fireStarted = false;
+	iPoint		smokeOffset;
 
 
 public:
@@ -139,7 +139,7 @@ public:
 	bool postUpdate();
 
 private:
-	float acumulator = 0.0f;
+	float	   acumulator = 0.0f;
 };
 
 
