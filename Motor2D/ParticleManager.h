@@ -34,6 +34,8 @@ public:
 
 	bool cleanActiveParticles();
 
+	bool cleanActiveEmisors();
+
 	Particle* addParticle(const Particle& p, int x, int y, Uint32 secLife = INT_MAX, SDL_Texture* texture = NULL,
 		unsigned int sfx = 0, uint32 delay = 0);
 

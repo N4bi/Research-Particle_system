@@ -133,6 +133,18 @@ bool ParticleManager::cleanActiveParticles()
 	return true;
 }
 
+bool ParticleManager::cleanActiveEmisors()
+{
+	std::list<Emisor*>::iterator tmp = emisorList.begin();
+
+	for (; tmp != emisorList.end(); ++tmp)
+		RELEASE((*tmp));
+
+	emisorList.clear();
+
+	return true;
+}
+
 bool ParticleManager::loadParticlesFile(pugi::xml_document& file)
 {
 	bool ret = true;
