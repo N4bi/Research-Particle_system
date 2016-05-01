@@ -69,7 +69,6 @@ bool ParticleManager::update(float dt)
 	{
 		if ((*tmp2)->update(dt) == false)
 		{
-			(*tmp2)->destroy();
 			RELEASE((*tmp2));
 			tmp2 = emisorList.erase(tmp2);
 		}
