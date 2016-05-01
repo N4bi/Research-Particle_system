@@ -145,7 +145,7 @@ bool Scene::update(float dt)
 		app->input->getMousePosition(m);
 		m = app->render->screenToWorld(m.x, m.y);
 
-		app->particle->addBurst(m.x, m.y, 0.1f,5, 300.0f, 265.0f, 275.0f);
+		app->particle->addBurst(m.x, m.y);
 	}
 
 	return true;

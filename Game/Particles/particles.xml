@@ -27,4 +27,24 @@
 
 	</fire1>
 
+	<burst>
+
+		<burst_anim x = "0" y = "0" w = "128" h = "128" frames_per_row = "8" frames_per_column = "5" frame_number = "40" speed = "0.05" loop = "false"/>
+
+		<burst_speed x = " 0 " y = "0" />
+
+		<burst_file value ="Particles/Explosion/explosion2.png"/>
+		
+		<burst_life value = " 5 "/>
+
+		<emisor_duration value = "0.1" />
+
+		<emisor_velocity value = "300.0"/>
+
+		<min_angle value = "265.0f"/>
+
+		<max_angle value = "275.0f"/>
+
+	</burst>
+
 </particles>

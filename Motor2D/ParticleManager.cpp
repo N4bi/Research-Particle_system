@@ -290,16 +290,12 @@ FireEmisor* ParticleManager::addFire(int x, int y, float duration)
 	return ret;
 }
 
-BurstEmisor* ParticleManager::addBurst(int x, int y, float duration,Uint32 particle_life, float velocity, float minAngle, float maxAngle)
+BurstEmisor* ParticleManager::addBurst(int x,int y)
 {
 	BurstEmisor* ret = NULL;
 
-	ret = new BurstEmisor(duration,particle_life,velocity,minAngle,maxAngle);
-	ret->burst.life = particle_life;
+	ret = new BurstEmisor();
 	ret->position.set(x, y);
-	ret->velocity = velocity;
-	ret->minAngle = minAngle;
-	ret->maxAngle = maxAngle;
 
 	ret->timer.start();
 	ret->active = ret->alive = true;
@@ -449,8 +445,6 @@ bool Emisor::update(float dt) // If particles are created each frame
 	if (alive && active)
 	{
 		Particle* q = app->particle->addParticle(particleEmited, position.x, position.y, particleEmited.life);
-		/*Particle* q = app->particle->addParticle2(particleEmited, position.x, position.y, particleEmited.life, particleEmited.image);*/
-
 		q->setSpeed(velocity, minAngle, maxAngle);
 
 		position.x += speed.x * dt / 1000;
@@ -513,13 +507,13 @@ FireEmisor::FireEmisor(float time) : Emisor()
 	bool fireLoop = fire1.child("fire_anim").attribute("loop").as_bool();
 	float fireSpeedX = fire1.child("fire_speed").attribute("x").as_float();
 	float fireSpeedY = fire1.child("fire_speed").attribute("y").as_float();
-	const char* firePath = fire1.child("fire_anim").attribute("fire_file").as_string();
+	const char* firePath = fire1.child("fire_file").attribute("value").as_string();
 
 	fire.anim.setAnimations(fireX, fireY, fireW, fireH, fireFPR, fireFPC, fireFrames);
 	fire.anim.speed = fireAnimSpeed;
 	fire.anim.loop = fireLoop;
 	fire.speed.set(fireSpeedX, fireSpeedY);
-	fire.image = app->tex->loadTexture("Particles/Flame/flameLargeDiablo2.png");
+	fire.image = app->tex->loadTexture(firePath);
 	fire.life = duration;
 
 	int smokeX = fire1.child("smoke_anim").attribute("x").as_int();
@@ -538,7 +532,7 @@ FireEmisor::FireEmisor(float time) : Emisor()
 	int smokeOffsetX = fire1.child("smoke_offset").attribute("x").as_int();
 	int smokeOffsetY = fire1.child("smoke_offset").attribute("y").as_int();
 	float smokeLife = fire1.child("smoke_life").attribute("value").as_float();
-	const char* smokePath = fire1.child("smoke_anim").attribute("smoke_file").as_string();
+	const char* smokePath = fire1.child("smoke_file").attribute("value").as_string();
 
 	smoke.anim.setAnimations(smokeX, smokeY, smokeW, smokeH, smokeFPR, smokeFPC, smokeFrames);
 	smoke.anim.speed = smokeAnimSpeed;
@@ -547,7 +541,7 @@ FireEmisor::FireEmisor(float time) : Emisor()
 	smokeFrequence = smokeFreq;
 	smokeStart = smokeStart;
 	smokeOffset.set(smokeOffsetX, smokeOffsetY);
-	smoke.image = app->tex->loadTexture("Particles/Flame/smokeLargeDiablo2.png");
+	smoke.image = app->tex->loadTexture(smokePath);
 	smoke.life = smokeLife;
 }
 
@@ -606,61 +600,39 @@ bool FireEmisor::postUpdate()
 }
 
 // BurstEmisor
-BurstEmisor::BurstEmisor(float time, Uint32 particle_life, float velocity, float minAngle,float maxAngle) : Emisor()
+BurstEmisor::BurstEmisor() : Emisor()
 {
 
-	burst.anim.frames.push_back({ 0, 0, 128, 128 });
-	burst.anim.frames.push_back({ 128, 0, 128, 128 });
-	burst.anim.frames.push_back({ 256, 0, 128, 128 });
-	burst.anim.frames.push_back({ 384, 0, 128, 128 });
-	burst.anim.frames.push_back({ 512, 0, 128, 128 });
-	burst.anim.frames.push_back({ 640, 0, 128, 128 });
-	burst.anim.frames.push_back({ 768, 0, 128, 128 });
-	burst.anim.frames.push_back({ 896, 0, 128, 128 });
-	burst.anim.frames.push_back({ 0, 128, 128, 128 });
-	burst.anim.frames.push_back({ 128, 128, 128, 128 });
-	burst.anim.frames.push_back({ 256, 128, 128, 128 });
-	burst.anim.frames.push_back({ 384, 128, 128, 128 });
-	burst.anim.frames.push_back({ 512, 128, 128, 128 });
-	burst.anim.frames.push_back({ 640, 128, 128, 128 });
-	burst.anim.frames.push_back({ 768, 128, 128, 128 });
-	burst.anim.frames.push_back({ 896, 128, 128, 128 });
-	burst.anim.frames.push_back({ 0, 256, 128, 128 });
-	burst.anim.frames.push_back({ 128, 256, 128, 128 });
-	burst.anim.frames.push_back({ 256, 256, 128, 128 });
-	burst.anim.frames.push_back({ 384, 256, 128, 128 });
-	burst.anim.frames.push_back({ 512, 256, 128, 128 });
-	burst.anim.frames.push_back({ 640, 256, 128, 128 });
-	burst.anim.frames.push_back({ 768, 256, 128, 128 });
-	burst.anim.frames.push_back({ 896, 256, 128, 128 });
-	burst.anim.frames.push_back({ 0, 384, 128, 128 });
-	burst.anim.frames.push_back({ 128, 384, 128, 128 });
-	burst.anim.frames.push_back({ 256, 384, 128, 128 });
-	burst.anim.frames.push_back({ 384, 384, 128, 128 });
-	burst.anim.frames.push_back({ 512, 384, 128, 128 });
-	burst.anim.frames.push_back({ 640, 384, 128, 128 });
-	burst.anim.frames.push_back({ 768, 384, 128, 128 });
-	burst.anim.frames.push_back({ 896, 384, 128, 128 });
-	burst.anim.frames.push_back({ 0, 512, 128, 128 });
-	burst.anim.frames.push_back({ 128, 512, 128, 128 });
-	burst.anim.frames.push_back({ 256, 512, 128, 128 });
-	burst.anim.frames.push_back({ 384, 512, 128, 128 });
-	burst.anim.frames.push_back({ 512, 512, 128, 128 });
-	burst.anim.frames.push_back({ 640, 512, 128, 128 });
-	burst.anim.frames.push_back({ 768, 512, 128, 128 });
-	burst.anim.frames.push_back({ 896, 512, 128, 128 });
-	burst.anim.speed = 0.05f;
-	burst.anim.loop = false;
-	burst.anim.current_frame = 0.0f;
-	burst.setSpeed(0, 0);
-	burst.image = app->tex->loadTexture("Particles/Explosion/explosion.png");
-	burst.life = particle_life;
+	pugi::xml_node burst1 = app->particle->particle_file.child("particles").child("burst");
 
-	emisor_burst.duration = time;
-	emisor_burst.velocity = velocity;
-	emisor_burst.minAngle = minAngle;
-	emisor_burst.maxAngle = maxAngle;
+	int burstX = burst1.child("burst_anim").attribute("x").as_int();
+	int burstY = burst1.child("burst_anim").attribute("y").as_int();
+	int burstW = burst1.child("burst_anim").attribute("w").as_int();
+	int burstH = burst1.child("burst_anim").attribute("h").as_int();
+	int burstFPR = burst1.child("burst_anim").attribute("frames_per_row").as_int();
+	int burstFPC = burst1.child("burst_anim").attribute("frames_per_column").as_int();
+	int burstFrames = burst1.child("burst_anim").attribute("frame_number").as_int();
+	float burstAnimSpeed = burst1.child("burst_anim").attribute("speed").as_float();
+	bool burstLoop = burst1.child("burst_anim").attribute("loop").as_bool();
+	float burstSpeedX = burst1.child("burst_speed").attribute("x").as_float();
+	float burstSpeedY = burst1.child("burst_speed").attribute("y").as_float();
+	const char* burstPath = burst1.child("burst_file").attribute("value").as_string();
+	int burstLife = burst1.child("burst_life").attribute("value").as_int();
+	float emisor_duration = burst1.child("emisor_duration").attribute("value").as_float();
+	float emisor_velocity = burst1.child("emisor_velocity").attribute("value").as_float();
+	float min_angle = burst1.child("min_angle").attribute("value").as_float();
+	float max_angle = burst1.child("max_angle").attribute("value").as_float();
 
+	burst.anim.setAnimations(burstX, burstY, burstW, burstH, burstFPR, burstFPC, burstFrames);
+	burst.anim.speed = burstAnimSpeed;
+	burst.anim.loop = burstLoop;
+	burst.setSpeed(burstSpeedX, burstSpeedY);
+	burst.image = app->tex->loadTexture(burstPath);
+	burst.life = burstLife;
+	emisor_burst.duration = emisor_duration;
+	emisor_burst.velocity = emisor_velocity;
+	emisor_burst.minAngle = min_angle;
+	emisor_burst.maxAngle = max_angle;
 
 }
 
