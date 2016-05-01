@@ -56,10 +56,10 @@ private:
 	std::list<Emisor*> emisorList;
 	std::string textureFile;
 
-	bool loadParticlesFile();
+	bool loadParticlesFile(pugi::xml_document& file);
 
 public:
-	pugi::xml_node particles_node;
+	pugi::xml_document particle_file;
 
 };
 

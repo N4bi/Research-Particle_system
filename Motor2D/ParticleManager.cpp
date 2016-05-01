@@ -33,8 +33,8 @@ bool ParticleManager::start()
 	LOG("Particle Manager: Start");
 	texture = app->tex->loadTexture(textureFile.c_str());
 
-	ret = loadParticlesFile();
-	particles_node;
+	ret = loadParticlesFile(particle_file);
+
 	return ret;
 }
 
@@ -131,23 +131,20 @@ bool ParticleManager::cleanActiveParticles()
 	return true;
 }
 
-bool ParticleManager::loadParticlesFile()
+bool ParticleManager::loadParticlesFile(pugi::xml_document& file)
 {
 	bool ret = true;
 
-	pugi::xml_document	particles_file;
 	char* buff;
 	int size = app->fs->load("Particles/particles.xml", &buff);
-	pugi::xml_parse_result result = particles_file.load_buffer(buff, size);
+	pugi::xml_parse_result result = file.load_buffer(buff, size);
 	RELEASE(buff);
 
 	if (result == NULL)
 	{
-		LOG("Could not load particles xml file. Pugi error: %s", result.description());
 		ret = false;
+		LOG("Could not load particles xml file. Pugi error: %s", result.description());
 	}
-	else
-		particles_node = particles_file.child("particles");
 
 	return ret;
 }
@@ -503,40 +500,55 @@ FireEmisor::FireEmisor(float time) : Emisor()
 {
 	duration = time;
 
-	/*pugi::xml_node fire1 = app->particle->particles_node.child("fire1");
+	pugi::xml_node fire1 = app->particle->particle_file.child("particles").child("fire1");
 
 	int fireX = fire1.child("fire_anim").attribute("x").as_int();
 	int fireY = fire1.child("fire_anim").attribute("y").as_int();
 	int fireW = fire1.child("fire_anim").attribute("w").as_int();
 	int fireH = fire1.child("fire_anim").attribute("h").as_int();
 	int fireFPR = fire1.child("fire_anim").attribute("frames_per_row").as_int();
-	int fireFPC = fire1.child("fire_anim").attribute("frames_per_column").as_int();*/
+	int fireFPC = fire1.child("fire_anim").attribute("frames_per_column").as_int();
+	int fireFrames = fire1.child("fire_anim").attribute("frame_number").as_int();
+	float fireAnimSpeed = fire1.child("fire_anim").attribute("speed").as_float();
+	bool fireLoop = fire1.child("fire_anim").attribute("loop").as_bool();
+	float fireSpeedX = fire1.child("fire_speed").attribute("x").as_float();
+	float fireSpeedY = fire1.child("fire_speed").attribute("y").as_float();
+	const char* firePath = fire1.child("fire_anim").attribute("fire_file").as_string();
 
-	fire.anim.setAnimations(0, 219, 119, 197, 20, 1, 20);
-	fire.anim.speed = 0.01f;
-	fire.anim.loop = true;
-	fire.anim.current_frame = 0.0f;
-	fire.speed.set(0, 0);
+	fire.anim.setAnimations(fireX, fireY, fireW, fireH, fireFPR, fireFPC, fireFrames);
+	fire.anim.speed = fireAnimSpeed;
+	fire.anim.loop = fireLoop;
+	fire.speed.set(fireSpeedX, fireSpeedY);
 	fire.image = app->tex->loadTexture("Particles/Flame/flameLargeDiablo2.png");
 	fire.life = duration;
 
-	/*int smokeX = fire1.child("smoke_anim").attribute("x").as_int();
+	int smokeX = fire1.child("smoke_anim").attribute("x").as_int();
 	int smokeY = fire1.child("smoke_anim").attribute("y").as_int();
 	int smokeW = fire1.child("smoke_anim").attribute("w").as_int();
 	int smokeH = fire1.child("smoke_anim").attribute("h").as_int();
 	int smokeFPR = fire1.child("smoke_anim").attribute("frames_per_row").as_int();
-	int smokeFPC = fire1.child("smoke_anim").attribute("frames_per_column").as_int();*/
+	int smokeFPC = fire1.child("smoke_anim").attribute("frames_per_column").as_int();
+	int smokeFrames = fire1.child("smoke_anim").attribute("frame_number").as_int();
+	float smokeAnimSpeed = fire1.child("smoke_anim").attribute("speed").as_float();
+	bool smokeLoop = fire1.child("smoke_anim").attribute("loop").as_bool();
+	float smokeSpeedX = fire1.child("smoke_speed").attribute("x").as_float();
+	float smokeSpeedY = fire1.child("smoke_speed").attribute("y").as_float();
+	float smokeFreq = fire1.child("smoke_frequence").attribute("value").as_float();
+	float smokeStart = fire1.child("smoke_start").attribute("value").as_float();
+	int smokeOffsetX = fire1.child("smoke_offset").attribute("x").as_int();
+	int smokeOffsetY = fire1.child("smoke_offset").attribute("y").as_int();
+	float smokeLife = fire1.child("smoke_life").attribute("value").as_float();
+	const char* smokePath = fire1.child("smoke_anim").attribute("smoke_file").as_string();
 
-	smoke.anim.setAnimations(0, 119, 119, 197, 20, 1, 20);
-	smoke.anim.speed = 0.02f;
-	smoke.anim.loop = false;
-	smoke.anim.current_frame = 0.0f;
-	smoke.speed.set(0, -100);
-	smokeFrequence = 1.0f;
-	smokeStart = 0.0f;
-	smokeOffset.set(0, -1);
+	smoke.anim.setAnimations(smokeX, smokeY, smokeW, smokeH, smokeFPR, smokeFPC, smokeFrames);
+	smoke.anim.speed = smokeAnimSpeed;
+	smoke.anim.loop = smokeLoop;
+	smoke.speed.set(smokeSpeedX, smokeSpeedY);
+	smokeFrequence = smokeFreq;
+	smokeStart = smokeStart;
+	smokeOffset.set(smokeOffsetX, smokeOffsetY);
 	smoke.image = app->tex->loadTexture("Particles/Flame/smokeLargeDiablo2.png");
-	smoke.life = 2.0f;
+	smoke.life = smokeLife;
 }
 
 FireEmisor::~FireEmisor()

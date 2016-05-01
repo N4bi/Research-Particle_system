@@ -63,6 +63,7 @@ public:
 				frames.push_back({ x + (w * i), y + (h * j), w, h });
 			}
 		}
+		current_frame = 0.0f;
 	}
 
 };
