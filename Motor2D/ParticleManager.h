@@ -48,7 +48,7 @@ public:
 
 	FireEmisor* addFire(int x, int y, float duration);
 
-	BurstEmisor* addBurst(int x, int y, float duration, float velocity, float minAngle, float maxAngle);
+	BurstEmisor* addBurst(int x, int y, float duration,Uint32 particle_life, float velocity, float minAngle, float maxAngle);
 
 private:
 	SDL_Texture* texture;
@@ -158,7 +158,7 @@ public:
 
 
 public:
-	BurstEmisor(float time, float velocity, float minAngle, float maxAngle);
+	BurstEmisor(float time,Uint32 particle_life, float velocity, float minAngle, float maxAngle);
 	~BurstEmisor();
 
 	bool update(float dt);

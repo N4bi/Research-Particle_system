@@ -293,11 +293,12 @@ FireEmisor* ParticleManager::addFire(int x, int y, float duration)
 	return ret;
 }
 
-BurstEmisor* ParticleManager::addBurst(int x, int y, float duration, float velocity, float minAngle, float maxAngle)
+BurstEmisor* ParticleManager::addBurst(int x, int y, float duration,Uint32 particle_life, float velocity, float minAngle, float maxAngle)
 {
 	BurstEmisor* ret = NULL;
 
-	ret = new BurstEmisor(duration,velocity,minAngle,maxAngle);
+	ret = new BurstEmisor(duration,particle_life,velocity,minAngle,maxAngle);
+	ret->burst.life = particle_life;
 	ret->position.set(x, y);
 	ret->velocity = velocity;
 	ret->minAngle = minAngle;
@@ -593,9 +594,8 @@ bool FireEmisor::postUpdate()
 }
 
 // BurstEmisor
-BurstEmisor::BurstEmisor(float time,float velocity, float minAngle,float maxAngle) : Emisor()
+BurstEmisor::BurstEmisor(float time, Uint32 particle_life, float velocity, float minAngle,float maxAngle) : Emisor()
 {
-
 
 	burst.anim.frames.push_back({ 0, 0, 128, 128 });
 	burst.anim.frames.push_back({ 128, 0, 128, 128 });
@@ -642,7 +642,7 @@ BurstEmisor::BurstEmisor(float time,float velocity, float minAngle,float maxAngl
 	burst.anim.current_frame = 0.0f;
 	burst.setSpeed(0, 0);
 	burst.image = app->tex->loadTexture("Particles/Explosion/explosion.png");
-	burst.life = duration;
+	burst.life = particle_life;
 
 	emisor_burst.duration = time;
 	emisor_burst.velocity = velocity;
