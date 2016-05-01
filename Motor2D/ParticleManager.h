@@ -34,6 +34,8 @@ public:
 
 	bool cleanActiveParticles();
 
+	bool cleanActiveEmisors();
+
 	Particle* addParticle(const Particle& p, int x, int y, Uint32 secLife = INT_MAX, SDL_Texture* texture = NULL,
 		unsigned int sfx = 0, uint32 delay = 0);
 
@@ -46,8 +48,10 @@ public:
 
 private:
 	SDL_Texture* texture;
-	std::list<Particle*> particleList;
-	std::list<Emisor*> emisorList;
+	//TODO 1: Create two list, one with particles and another one with emisors. Call the particle list "particleList" and the emisor list "emisorList"
+
+	//std::list<Particle*> particleList;
+	//std::list<Emisor*> emisorList;
 	std::string textureFile;
 
 	bool loadParticlesFile(pugi::xml_document& file);

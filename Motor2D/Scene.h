@@ -44,7 +44,6 @@ public:
 private:
 
 	bool debug = false;
-	Particle* particle = NULL;
 };
 
 #endif // __SCENE_H__

@@ -66,16 +66,7 @@ bool Scene::update(float dt)
 	if (app->input->getKey(SDL_SCANCODE_O) == KEY_REPEAT)
 		app->map->setLayerProperty("PROTOTYPE_LOGIC_MAP.tmx", "Logic_Layer", "NoDraw", 1);
 
-	if (app->input->getKey(SDL_SCANCODE_R) == KEY_DOWN)
-	{
-		iPoint m;
-		app->input->getMousePosition(m);
-		m = app->render->screenToWorld(m.x, m.y);
-
-		app->particle->addFire(m.x, m.y, 5.0f);
-
-	}
-
+	
 	if (app->input->getKey(SDL_SCANCODE_U) == KEY_DOWN)
 	{
 		iPoint m;
@@ -102,10 +93,11 @@ bool Scene::update(float dt)
 		float emisorDuration = 0.05f;
 		Uint32 particleLife = 4;
 		int particleVelocity = 10;
-		float min = 220.0f;
-		float max = 310.0f;
+		float min_angle = 220.0f;
+		float max_angle = 310.0f;
 
-		app->particle->addEmisor(p, m.x, m.y, emisorDuration, particleLife, particleVelocity, min, max, p.image);
+		// TODO 6: Uncomment this and try diferent values on attributes 
+		/*app->particle->addEmisor(p, m.x, m.y, emisorDuration, particleLife, particleVelocity, min_angle, max_angle, p.image);*/
 	}
 
 	if (app->input->getKey(SDL_SCANCODE_T) == KEY_DOWN)
@@ -136,21 +128,34 @@ bool Scene::update(float dt)
 		float min = 0.0f;
 		float max = 360.0f;
 
-
-		Emisor* e = app->particle->addEmisor(p, m.x, m.y, emisorDuration, particleLife, 
-			particleVelocity, min, max, p.image);
+		
+		// TODO 6: Uncomment this and try diferent values on attributes 
+		//Emisor* e = app->particle->addEmisor(p, m.x, m.y, emisorDuration, particleLife, 
+		//	particleVelocity, min, max, p.image);
 	
-		e->speed.set(0, 0);
+		//e->speed.set(0, 0);
 	}
+	
+	// TODO 7: Uncomment this and try to change values in particles.xml
 
-	if (app->input->getKey(SDL_SCANCODE_Y) == KEY_DOWN)
-	{
-		iPoint m;
-		app->input->getMousePosition(m);
-		m = app->render->screenToWorld(m.x, m.y);
+	//if (app->input->getKey(SDL_SCANCODE_Y) == KEY_DOWN)
+	//{
+	//	iPoint m;
+	//	app->input->getMousePosition(m);
+	//	m = app->render->screenToWorld(m.x, m.y);
 
-		app->particle->addBurst(m.x, m.y);
-	}
+	//	app->particle->addBurst(m.x, m.y);
+	//}
+
+	//if (app->input->getKey(SDL_SCANCODE_R) == KEY_DOWN)
+	//{
+	//	iPoint m;
+	//	app->input->getMousePosition(m);
+	//	m = app->render->screenToWorld(m.x, m.y);
+
+	//	app->particle->addFire(m.x, m.y, 5.0f);
+
+	//}
 
 	return true;
 }

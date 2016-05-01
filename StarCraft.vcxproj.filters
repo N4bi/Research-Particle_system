@@ -26,9 +26,6 @@
     <ClCompile Include="Motor2D\Render.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
-    <ClCompile Include="Motor2D\Scene.cpp">
-      <Filter>Modules</Filter>
-    </ClCompile>
     <ClCompile Include="Motor2D\Window.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
@@ -74,6 +71,9 @@
     <ClCompile Include="Motor2D\ParticleManager.cpp">
       <Filter>Research-Particle_System</Filter>
     </ClCompile>
+    <ClCompile Include="Motor2D\Scene.cpp">
+      <Filter>Research-Particle_System</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Motor2D\Timer.h">
@@ -110,9 +110,6 @@
       <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="Motor2D\Render.h">
-      <Filter>Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="Motor2D\Scene.h">
       <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="Motor2D\Window.h">
@@ -191,6 +188,9 @@
       <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="Motor2D\ParticleManager.h">
+      <Filter>Research-Particle_System</Filter>
+    </ClInclude>
+    <ClInclude Include="Motor2D\Scene.h">
       <Filter>Research-Particle_System</Filter>
     </ClInclude>
   </ItemGroup>
